@@ -28,6 +28,10 @@ public class Program
             {
                 Console.WriteLine(obj.ToString());
             }
+            else if (raw_data[0] == "end")
+            {
+                break;
+            }
             else
             {
                 Console.WriteLine("Некорректное название поля или некорректное значение поля");
