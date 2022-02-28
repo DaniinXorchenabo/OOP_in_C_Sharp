@@ -14,10 +14,10 @@ namespace lab_2
         [STAThread]
         static void Main()
         {
-            var newTStation = new TelephoneStation();
+            var newTStations = new List<TelephoneStation>() {};
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1(newTStation));
+            Application.Run(new Form1(newTStations));
         }
     }
 }
