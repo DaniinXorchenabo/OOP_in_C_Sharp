@@ -60,6 +60,11 @@ public class TelephoneStation
 
     public override string ToString()
     {
+        return $"{CompanyName ?? "<unknown>"}";
+    }
+    
+    public string ToLongString()
+    {
         object? _a;
         return
             $"ATC=>[{string.Join(", ", _publicProperties.Select(x => $"{x.Name}={((_a = x.GetValue(this)) is null ? "<unset>" : $"\"{_a.ToString()}\"")}"))}]";
