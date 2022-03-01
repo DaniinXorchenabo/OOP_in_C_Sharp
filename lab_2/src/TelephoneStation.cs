@@ -7,11 +7,11 @@ namespace lab_2;
 
 public class TelephoneStation
 {
-    private static readonly IEnumerable<PropertyInfo> _publicProperties;
+    private static readonly IEnumerable<PropertyInfo> PublicProperties;
 
     static TelephoneStation()
     {
-        _publicProperties = typeof(TelephoneStation)
+        PublicProperties = typeof(TelephoneStation)
             .GetProperties()
             .Where(x => x.GetMethod != null && x.GetMethod.IsPublic);
     }
@@ -20,7 +20,7 @@ public class TelephoneStation
     public int? CountOfUsers { get; set; } = null;
     public Decimal? MonthlySubscriptionFee { get; set; } = null;
     public string? CompanyName { get; set; } = null;
-    public string? INN { get; set; } = null;
+    public string? Inn { get; set; } = null;
     public float? TrustIndex { get; set; } = null;
     public string? DateOfFoundation { get; set; } = null;
 
@@ -37,7 +37,7 @@ public class TelephoneStation
         CountOfUsers = countOfUsers;
         MonthlySubscriptionFee = monthlySubscriptionFee;
         CompanyName = companyName;
-        INN = inn;
+        Inn = inn;
         TrustIndex = trustIndex;
         DateOfFoundation = dateOfFoundation;
     }
@@ -55,19 +55,24 @@ public class TelephoneStation
     public TelephoneStation(string? companyName, string? inn)
     {
         CompanyName = companyName;
-        INN = inn;
+        Inn = inn;
     }
 
     public override string ToString()
     {
         return $"{CompanyName ?? "<unknown>"}";
     }
-    
+
     public string ToLongString()
     {
-        object? _a;
-        return
-            $"ATC=>[{string.Join(", ", _publicProperties.Select(x => $"{x.Name}={((_a = x.GetValue(this)) is null ? "<unset>" : $"\"{_a.ToString()}\"")}"))}]";
+        return $"ATC=>[{string.Join(", ", ParamsAsStrings())}]";
+    }
+
+    public IEnumerable<string> ParamsAsStrings()
+    {
+        object? a;
+        return PublicProperties.Select(
+            x => $"{x.Name}={((a = x.GetValue(this)) is null ? "<unset>" : $"\"{a.ToString()}\"")}");
     }
 
     public void GetCompanyName()
@@ -77,13 +82,13 @@ public class TelephoneStation
 
     public List<string> GetAllFields()
     {
-        return _publicProperties.Select(x => x.Name).ToList();
+        return PublicProperties.Select(x => x.Name).ToList();
     }
 
     public bool SetSomeValue(string targetFieldName, string newFieldValue)
     {
-        PropertyInfo ? findField;
-        if ((findField = _publicProperties.FirstOrDefault(i => i.Name == targetFieldName)) is not null)
+        PropertyInfo? findField;
+        if ((findField = PublicProperties.FirstOrDefault(i => i.Name == targetFieldName)) is not null)
         {
             // var _type = findField.PropertyType;
             findField.SetValue(this, newFieldValue);

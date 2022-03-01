@@ -14,13 +14,13 @@ namespace lab_2
 {
     public partial class Form1 : Form
     {
-        private List<TelephoneStation> _TelephoneStations;
-        private int? _CurrentStationIndex;
+        private List<TelephoneStation> _telephoneStations;
+        private int? _currentStationIndex;
         public Form1(List<TelephoneStation> telephoneStationsList)
         {
             InitializeComponent();
-            _TelephoneStations = telephoneStationsList;
-            _TelephoneStations.Select(AddStation);
+            _telephoneStations = telephoneStationsList;
+            _telephoneStations.Select(AddStation);
 
         }
             
@@ -29,7 +29,20 @@ namespace lab_2
         {
             if (sender is ListBox stationsListBox)
             {
-                _CurrentStationIndex = stationsListBox.SelectedIndex;
+                IEnumerable<string> createParams;
+                _currentStationIndex = stationsListBox.SelectedIndex;
+                (createParams = _telephoneStations[(int) _currentStationIndex]
+                    .ParamsAsStrings())
+                    .Take(listBox2.Items.Count)
+                    .Zip(Enumerable.Range(0, listBox2.Items.Count), (tStationParam, index) => 
+                        listBox2.Items[index] = tStationParam.ToString())
+                    .ToList();
+                createParams.Skip(listBox2.Items.Count).Select(x => listBox2.Items.Add(x));
+                for (var i =  listBox2.Items.Count - 1; i >= createParams.Count(); i--)
+                {
+                    listBox2.Items.RemoveAt(i);
+                }
+                
             }
         }
 
@@ -45,9 +58,9 @@ namespace lab_2
         
         private void deleteStationButton_Click(object sender, EventArgs e)
         {
-            if (_CurrentStationIndex != null)
+            if (_currentStationIndex != null)
             {
-                RemoveStation((int)_CurrentStationIndex);
+                RemoveStation((int)_currentStationIndex);
             }
         }
 
@@ -78,19 +91,19 @@ namespace lab_2
 
         private bool AddStation(TelephoneStation newStation = null)
         {
-            _TelephoneStations.Add(newStation ??= new TelephoneStation());
+            _telephoneStations.Add(newStation ??= new TelephoneStation());
             listBox1.Items.Add(newStation);
             return false;
         }
 
         private void RemoveStation(int index)
         {
-            _TelephoneStations.RemoveAt(index);
+            _telephoneStations.RemoveAt(index);
             listBox1.Items.RemoveAt(index);
         }
         private void RemoveStation(TelephoneStation currentStation)
         {
-            _TelephoneStations.Remove(currentStation);
+            _telephoneStations.Remove(currentStation);
             listBox1.Items.Remove(currentStation);
         }
     }
