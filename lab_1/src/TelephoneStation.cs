@@ -4,24 +4,24 @@ namespace lab_1;
 
 public class TelephoneStation
 {
-    private static readonly IEnumerable<PropertyInfo> _publicProperties;
+    private static readonly IEnumerable<PropertyInfo> PublicProperties;
 
     static TelephoneStation()
     {
-        _publicProperties = typeof(TelephoneStation)
+        PublicProperties = typeof(TelephoneStation)
             .GetProperties()
             .Where(x => x.GetMethod != null && x.GetMethod.IsPublic);
     }
 
     public string? Address { get; set; } = null;
     public int? CountOfUsers { get; set; } = null;
-    public Decimal? MonthlySubscriptionFee { get; set; } = null;
+    public Decimal? MonthlySubscriptionFee { get; set; } = null;    
     public string? CompanyName { get; set; } = null;
-    public string? INN { get; set; } = null;
+    public string? Inn { get; set; } = null;
     public float? TrustIndex { get; set; } = null;
     public string? DateOfFoundation { get; set; } = null;
 
-    public TelephoneStation(
+    public TelephoneStation (
         string? address = null,
         int? countOfUsers = null,
         decimal? monthlySubscriptionFee = null,
@@ -34,14 +34,12 @@ public class TelephoneStation
         CountOfUsers = countOfUsers;
         MonthlySubscriptionFee = monthlySubscriptionFee;
         CompanyName = companyName;
-        INN = inn;
+        Inn = inn;
         TrustIndex = trustIndex;
         DateOfFoundation = dateOfFoundation;
     }
 
-    public TelephoneStation()
-    {
-    }
+    public TelephoneStation(){}
 
 
     public TelephoneStation(string? companyName)
@@ -52,14 +50,16 @@ public class TelephoneStation
     public TelephoneStation(string? companyName, string? inn)
     {
         CompanyName = companyName;
-        INN = inn;
+        Inn = inn;
     }
 
     public override string ToString()
     {
-        object? _a;
-        return
-            $"ATC=>[{string.Join(", ", _publicProperties.Select(x => $"{x.Name}={((_a = x.GetValue(this)) is null ? "<unset>" : $"\"{_a.ToString()}\"")}"))}]";
+        object? currentValue;
+        var paramsAsStr = PublicProperties
+            .Select(x => 
+                $"{x.Name}={((currentValue = x.GetValue(this)) == null ? "<unset>" : $"\"{currentValue}\"")}");
+        return $"ATC=>[{string.Join(", ", paramsAsStr)}]";
     }
 
     public void GetCompanyName()
@@ -69,13 +69,13 @@ public class TelephoneStation
 
     public List<string> GetAllFields()
     {
-        return _publicProperties.Select(x => x.Name).ToList();
+        return PublicProperties.Select(x => x.Name).ToList();
     }
 
     public bool SetSomeValue(string targetFieldName, string newFieldValue)
     {
         PropertyInfo ? findField;
-        if ((findField = _publicProperties.FirstOrDefault(i => i.Name == targetFieldName)) is not null)
+        if ((findField = PublicProperties.FirstOrDefault(i => i.Name == targetFieldName)) is not null)
         {
             // var _type = findField.PropertyType;
             findField.SetValue(this, newFieldValue);
