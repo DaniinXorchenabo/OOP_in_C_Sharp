@@ -31,18 +31,22 @@ namespace lab_2
             {
                 IEnumerable<string> createParams;
                 _currentStationIndex = stationsListBox.SelectedIndex;
-                (createParams = _telephoneStations[(int) _currentStationIndex]
-                    .ParamsAsStrings())
-                    .Take(listBox2.Items.Count)
-                    .Zip(Enumerable.Range(0, listBox2.Items.Count), (tStationParam, index) => 
-                        listBox2.Items[index] = tStationParam.ToString())
-                    .ToList();
-                createParams.Skip(listBox2.Items.Count).Select(x => listBox2.Items.Add(x));
-                for (var i =  listBox2.Items.Count - 1; i >= createParams.Count(); i--)
+                // _currentStationIndex == -1 при удалении выделенного объекта из списка
+                if (_currentStationIndex > -1)
                 {
-                    listBox2.Items.RemoveAt(i);
+                    (createParams = _telephoneStations[(int) _currentStationIndex]
+                            .ParamsAsStrings())
+                        .Take(listBox2.Items.Count)
+                        .Zip(Enumerable.Range(0, listBox2.Items.Count), (tStationParam, index) =>
+                            listBox2.Items[index] = tStationParam.ToString())
+                        .ToList();
+                    createParams.Skip(listBox2.Items.Count).Select(x => listBox2.Items.Add(x)).ToList();
+                    for (var i = listBox2.Items.Count - 1; i >= createParams.Count(); i--)
+                    {
+                        listBox2.Items.RemoveAt(i);
+                    }
                 }
-                
+
             }
         }
 
@@ -61,20 +65,24 @@ namespace lab_2
             if (_currentStationIndex != null)
             {
                 RemoveStation((int)_currentStationIndex);
+                for (var i = listBox2.Items.Count -1; i > -1; i--)
+                {
+                    listBox2.Items.RemoveAt(i);
+                }
             }
         }
 
-        private void listBox1_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-            // throw new System.NotImplementedException();
-        }
+        // private void listBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        // {
+        //     // throw new System.NotImplementedException();
+        // }
 
         private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
         {
             // throw new System.NotImplementedException();
         }
 
-        private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void selectedParam_SelectedIndexChanged(object sender, EventArgs e)
         {
             // throw new System.NotImplementedException();
         }
