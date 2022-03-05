@@ -15,13 +15,13 @@ public class TelephoneStation
 
     public string? Address { get; set; } = null;
     public int? CountOfUsers { get; set; } = null;
-    public Decimal? MonthlySubscriptionFee { get; set; } = null;    
+    public Decimal? MonthlySubscriptionFee { get; set; } = null;
     public string? CompanyName { get; set; } = null;
     public string? Inn { get; set; } = null;
     public float? TrustIndex { get; set; } = null;
     public string? DateOfFoundation { get; set; } = null;
 
-    public TelephoneStation (
+    public TelephoneStation(
         string? address = null,
         int? countOfUsers = null,
         decimal? monthlySubscriptionFee = null,
@@ -39,7 +39,9 @@ public class TelephoneStation
         DateOfFoundation = dateOfFoundation;
     }
 
-    public TelephoneStation(){}
+    public TelephoneStation()
+    {
+    }
 
 
     public TelephoneStation(string? companyName)
@@ -57,7 +59,7 @@ public class TelephoneStation
     {
         object? currentValue;
         var paramsAsStr = PublicProperties
-            .Select(x => 
+            .Select(x =>
                 $"{x.Name}={((currentValue = x.GetValue(this)) == null ? "<unset>" : $"\"{currentValue}\"")}");
         return $"ATC=>[{string.Join(", ", paramsAsStr)}]";
     }
@@ -74,11 +76,12 @@ public class TelephoneStation
 
     public bool SetSomeValue(string targetFieldName, string newFieldValue)
     {
-        PropertyInfo ? findField;
-        if ((findField = PublicProperties.FirstOrDefault(i => i.Name == targetFieldName)) is not null)
+        PropertyInfo? findField;
+        if ((findField = PublicProperties.FirstOrDefault(i => i.Name == targetFieldName)) != null)
         {
-            // var _type = findField.PropertyType;
-            findField.SetValue(this, newFieldValue);
+            Type t = Nullable.GetUnderlyingType(findField.PropertyType) ?? findField.PropertyType;
+            object safeValue = (newFieldValue == null) ? null : Convert.ChangeType(newFieldValue, t);
+            findField.SetValue(this, safeValue, null);
             return true;
         }
 
