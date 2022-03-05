@@ -35,6 +35,7 @@ namespace lab_2
         public int LastCurrentStationIndex { get; private set; } = -1;
         private string? _currentParamName;
         private int _currentParamIndex = -1;
+        private (int SelectionStart, int Length, char LastChar) _pointerPositionControl = (0,  0, '-');
         
 
         public Form1(List<TelephoneStation> telephoneStationsList)
@@ -56,7 +57,8 @@ namespace lab_2
                 listBox2.SelectedIndex = -1;
                 if (LastCurrentStationIndex != CurrentStationIndex)
                 {
-                    textBox1.Text = "";
+                    // textBox1.Text = "";
+                    _pointerPositionControl = (0, 0, '-');
                     textBox1.ReadOnly = true;
                 }
 
@@ -132,15 +134,35 @@ namespace lab_2
                         if (CurrentStationIndex > -1)
                         {
                             textBox1.ReadOnly = false;
-                            object paramValue = _telephoneStations[(int) CurrentStationIndex]
-                                .GetSomeValue(_currentParamName = currentParam.Split('=')[0]);
-                            if (paramValue != null)
+                            string? paramValue = _telephoneStations[(int) CurrentStationIndex]
+                                .GetSomeValue(_currentParamName = currentParam.Split('=')[0])?.ToString();
+                            if (paramValue!= null & paramValue != textBox1.Text)
                             {
-                                textBox1.Text = paramValue.ToString();
+                                int add;
+                                if (textBox1.Text.Length < paramValue.Length)
+                                {
+                                    add = 1;
+                                } else if (textBox1.SelectionStart > 0 & textBox1.Text[textBox1.SelectionStart-1] == paramValue[textBox1.SelectionStart-1])
+                                {
+                                    add = -1;
+                                }
+                                else
+                                {
+                                    add = 0;
+                                }
+                                _pointerPositionControl = (_pointerPositionControl.SelectionStart + add,
+                                    paramValue.Length, textBox1.SelectionStart>0?textBox1.Text[textBox1.SelectionStart-1]:'-');
+
+                                textBox1.Text = paramValue;
+                                
+                                textBox1.SelectionStart = _pointerPositionControl.SelectionStart;
+                                // _pointerPositionControl = (textBox1.SelectionStart, textBox1.Text.Length, textBox1.SelectionStart>0?textBox1.Text[textBox1.SelectionStart-1]:'-');
+
                             }
-                            else
+                            else if (paramValue == null)
                             {
                                 textBox1.Text = "";
+                                _pointerPositionControl = (0, 0, '-');
                             }
                         }
                         else
