@@ -72,7 +72,7 @@ public class TelephoneStation
     {
         object? a;
         return PublicProperties.Select(
-            x => $"{x.Name}={((a = x.GetValue(this)) is null ? "<unset>" : $"\"{a.ToString()}\"")}");
+            x => $"{x.Name}={((a = x.GetValue(this)) == null ? "<unset>" : $"\"{a.ToString()}\"")}");
     }
 
     public void GetCompanyName()
@@ -85,16 +85,35 @@ public class TelephoneStation
         return PublicProperties.Select(x => x.Name).ToList();
     }
 
-    public bool SetSomeValue(string targetFieldName, string newFieldValue)
+    public bool SetSomeValue(string targetFieldName, object newFieldValue)
     {
         PropertyInfo? findField;
         if ((findField = PublicProperties.FirstOrDefault(i => i.Name == targetFieldName)) is not null)
         {
-            // var _type = findField.PropertyType;
-            findField.SetValue(this, newFieldValue);
+            try
+            {
+                Type t = Nullable.GetUnderlyingType(findField.PropertyType) ?? findField.PropertyType;
+                object safeValue = (newFieldValue == null) ? null : Convert.ChangeType(newFieldValue, t);
+                findField.SetValue(this, safeValue, null);
+            } catch (FormatException e)
+            {
+                return false;
+            }
+
             return true;
         }
 
         return false;
+    }
+    
+    public object GetSomeValue(string targetFieldName)
+    {
+        PropertyInfo? findField;
+        if ((findField = PublicProperties.FirstOrDefault(i => i.Name == targetFieldName)) is not null)
+        {
+            // ((a = x.GetValue(this)) == null ? "<unset>" : $"\"{a.ToString()}\"")}")
+            return findField.GetValue(this);
+        }
+        return null;
     }
 }
