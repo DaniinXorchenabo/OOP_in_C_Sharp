@@ -15,15 +15,35 @@ namespace lab_2
     public partial class Form1 : Form
     {
         private List<TelephoneStation> _telephoneStations;
+
         private int _currentStationIndex = -1;
+        private int CurrentStationIndex
+        {
+            get
+            {
+                return this._currentStationIndex;
+            }
+            set
+            {
+                this.LastCurrentStationIndex = this._currentStationIndex < 0 & value > -1
+                    ? this.LastCurrentStationIndex
+                    : this._currentStationIndex;
+                this._currentStationIndex = value;
+            }
+        }
+
+        public int LastCurrentStationIndex { get; private set; } = -1;
         private string? _currentParamName;
         private int _currentParamIndex = -1;
+        
 
         public Form1(List<TelephoneStation> telephoneStationsList)
         {
+            CurrentStationIndex = -1;
             InitializeComponent();
             _telephoneStations = telephoneStationsList;
             _telephoneStations.Select(AddStation);
+            
         }
 
 
@@ -32,12 +52,19 @@ namespace lab_2
             if (sender is ListBox stationsListBox)
             {
                 IEnumerable<string> createParams;
-                _currentStationIndex = stationsListBox.SelectedIndex;
+                CurrentStationIndex = stationsListBox.SelectedIndex;
                 listBox2.SelectedIndex = -1;
-                // _currentStationIndex == -1 при удалении выделенного объекта из списка
-                if (_currentStationIndex > -1)
+                if (LastCurrentStationIndex != CurrentStationIndex)
                 {
-                    (createParams = _telephoneStations[(int) _currentStationIndex]
+                    textBox1.Text = "";
+                    textBox1.ReadOnly = true;
+                }
+
+                // _currentStationIndex == -1 при удалении выделенного объекта из списка
+                if (CurrentStationIndex > -1)
+                {
+                    label3.Text = _telephoneStations[CurrentStationIndex].ToLongString();
+                    (createParams = _telephoneStations[(int) CurrentStationIndex]
                             .ParamsAsStrings())
                         .Take(listBox2.Items.Count)
                         .Zip(Enumerable.Range(0, listBox2.Items.Count), (tStationParam, index) =>
@@ -48,6 +75,10 @@ namespace lab_2
                     {
                         listBox2.Items.RemoveAt(i);
                     }
+                }
+                else
+                {
+                    label3.Text = "";
                 }
             }
         }
@@ -64,11 +95,12 @@ namespace lab_2
 
         private void deleteStationButton_Click(object sender, EventArgs e)
         {
-            if (_currentStationIndex != null)
+            if (CurrentStationIndex != null)
             {
-                RemoveStation((int) _currentStationIndex);
+                RemoveStation((int) CurrentStationIndex);
                 for (var i = listBox2.Items.Count - 1; i > -1; i--)
                 {
+                    
                     listBox2.Items.RemoveAt(i);
                 }
 
@@ -97,9 +129,10 @@ namespace lab_2
                 {
                     if (paramsListBox.Items[_currentParamIndex] is string currentParam)
                     {
-                        if (_currentStationIndex > -1)
+                        if (CurrentStationIndex > -1)
                         {
-                            object paramValue = _telephoneStations[(int) _currentStationIndex]
+                            textBox1.ReadOnly = false;
+                            object paramValue = _telephoneStations[(int) CurrentStationIndex]
                                 .GetSomeValue(_currentParamName = currentParam.Split('=')[0]);
                             if (paramValue != null)
                             {
@@ -135,7 +168,7 @@ namespace lab_2
         {
             if (sender is TextBox currentTextBox){
                 string ? newValue = textBox1.Text;
-                if (_currentStationIndex > -1 && _currentParamIndex > -1)
+                if (CurrentStationIndex > -1 && _currentParamIndex > -1)
                 {
                     if (newValue == "")
                     {
@@ -147,17 +180,18 @@ namespace lab_2
                     //     
                     // }
 
-                    if (_telephoneStations[_currentStationIndex].SetSomeValue(_currentParamName, newValue))
+                    if (_telephoneStations[CurrentStationIndex].SetSomeValue(_currentParamName, newValue))
                     {
 
                         var lastCurrentParamIndex = (int) _currentParamIndex;
-                        listBox1.Items[_currentStationIndex] = _telephoneStations[_currentStationIndex];
-                        listBox1.SelectedIndex = _currentStationIndex;
+                        listBox1.Items[CurrentStationIndex] = _telephoneStations[CurrentStationIndex];
+                        listBox1.SelectedIndex = CurrentStationIndex;
+                        label3.Text = _telephoneStations[CurrentStationIndex].ToLongString();
                         _currentParamIndex = lastCurrentParamIndex;
                         if (_currentParamIndex > -1)
                         {
                             listBox2.Items[_currentParamIndex] =
-                                _telephoneStations[_currentStationIndex].ParamsAsStrings().ToList()[_currentParamIndex];
+                                _telephoneStations[CurrentStationIndex].ParamsAsStrings().ToList()[_currentParamIndex];
                             listBox2.SelectedIndex = _currentParamIndex;
                         }
                     }
@@ -176,19 +210,36 @@ namespace lab_2
         {
             _telephoneStations.Add(newStation ??= new TelephoneStation());
             listBox1.Items.Add(newStation);
+            textBox2.Text = TelephoneStation.ObjectCounter.ToString();
             return false;
         }
 
         private void RemoveStation(int index)
         {
-            _telephoneStations.RemoveAt(index);
-            listBox1.Items.RemoveAt(index);
+            TelephoneStation? deletingStation = null;
+            try
+            {
+                deletingStation = _telephoneStations[index];
+                _telephoneStations.RemoveAt(index);
+                listBox1.Items.RemoveAt(index);
+            }
+            finally
+            {
+                deletingStation?.Dispose();
+                textBox2.Text = TelephoneStation.ObjectCounter.ToString();
+            }
+
         }
 
         private void RemoveStation(TelephoneStation currentStation)
         {
             _telephoneStations.Remove(currentStation);
             listBox1.Items.Remove(currentStation);
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+            // throw new System.NotImplementedException();
         }
     }
 }

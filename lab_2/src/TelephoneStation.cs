@@ -5,15 +5,16 @@ using System.Reflection;
 
 namespace lab_2;
 
-public class TelephoneStation
+public class TelephoneStation : IDisposable
 {
     private static readonly IEnumerable<PropertyInfo> PublicProperties;
-
+    public static int ObjectCounter { get; private set; } = 0;
+    private bool _disposed = false;
     static TelephoneStation()
     {
         PublicProperties = typeof(TelephoneStation)
             .GetProperties()
-            .Where(x => x.GetMethod != null && x.GetMethod.IsPublic);
+            .Where(x => x.GetMethod != null && x.GetMethod.IsPublic && !x.GetMethod.IsStatic);
     }
 
     public string? Address { get; set; } = null;
@@ -40,22 +41,26 @@ public class TelephoneStation
         Inn = inn;
         TrustIndex = trustIndex;
         DateOfFoundation = dateOfFoundation;
+        ObjectCounter++;
     }
 
     public TelephoneStation()
     {
+        ObjectCounter++;
     }
 
 
     public TelephoneStation(string? companyName)
     {
         CompanyName = companyName;
+        ObjectCounter++;
     }
 
     public TelephoneStation(string? companyName, string? inn)
     {
         CompanyName = companyName;
         Inn = inn;
+        ObjectCounter++;
     }
 
     public override string ToString()
@@ -115,5 +120,31 @@ public class TelephoneStation
             return findField.GetValue(this);
         }
         return null;
+    }
+
+    public void Dispose()
+    {
+        
+        Dispose(true);
+        GC.SuppressFinalize(this);
+        
+    }
+    
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed) return;
+        if (disposing)
+        {
+            // Освобождаем управляемые ресурсы
+        }
+        // освобождаем неуправляемые объекты
+        _disposed = true;
+        ObjectCounter--;
+    }
+ 
+    // Деструктор
+    ~TelephoneStation()
+    {
+        Dispose (false);
     }
 }
