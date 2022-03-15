@@ -10,6 +10,7 @@ public class TelephoneStation : IDisposable
     private static readonly IEnumerable<PropertyInfo> PublicProperties;
     public static int ObjectCounter { get; private set; } = 0;
     private bool _disposed = false;
+
     static TelephoneStation()
     {
         PublicProperties = typeof(TelephoneStation)
@@ -19,16 +20,22 @@ public class TelephoneStation : IDisposable
 
     /// <summary> Адресс компании</summary>
     public string? Address { get; set; } = null;
+
     /// <summary> Количество клиентов компании</summary>
     public int? CountOfUsers { get; set; } = null;
+
     /// <summary> стоимость ежемесячных услуг</summary>
     public Decimal? MonthlySubscriptionFee { get; set; } = null;
+
     /// <summary> Название компании</summary>
     public string? CompanyName { get; set; } = null;
+
     /// <summary> ИНН компании</summary>
     public string? Inn { get; set; } = null;
+
     /// <summary> Индекс доверия пользователей этой компании</summary>
     public float? TrustIndex { get; set; } = null;
+
     /// <summary> Дата основания компании</summary>
     public string? DateOfFoundation { get; set; } = null;
 
@@ -82,7 +89,7 @@ public class TelephoneStation : IDisposable
         return $"ATC=>[{string.Join(", ", ParamsAsStrings())}]";
     }
 
-    
+
     /// <summary> Получить пары "название параметра - значение" в виде строки</summary>
     public IEnumerable<string> ParamsAsStrings()
     {
@@ -118,9 +125,8 @@ public class TelephoneStation : IDisposable
 
         return status;
     }
-    
-    /// <summary> получить значения любого поля из объекта </summary>
 
+    /// <summary> получить значения любого поля из объекта </summary>
     public object GetSomeValue(string targetFieldName)
     {
         PropertyInfo? findField;
@@ -129,17 +135,18 @@ public class TelephoneStation : IDisposable
             // ((a = x.GetValue(this)) == null ? "<unset>" : $"\"{a.ToString()}\"")}")
             return findField.GetValue(this);
         }
+
         return null;
     }
 
-    
+
     /// <summary> Деструктор</summary>
     public void Dispose()
     {
         Dispose(true);
         GC.SuppressFinalize(this);
     }
-    
+
     /// <summary> Деструктор</summary>
     protected virtual void Dispose(bool disposing)
     {
@@ -148,14 +155,15 @@ public class TelephoneStation : IDisposable
         {
             // Освобождаем управляемые ресурсы
         }
+
         // освобождаем неуправляемые объекты
         _disposed = true;
         ObjectCounter--;
     }
- 
+
     /// <summary> Деструктор</summary>
     ~TelephoneStation()
     {
-        Dispose (false);
+        Dispose(false);
     }
 }
