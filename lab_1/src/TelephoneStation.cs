@@ -13,12 +13,19 @@ public class TelephoneStation
             .Where(x => x.GetMethod != null && x.GetMethod.IsPublic);
     }
 
+    /// <summary> Адресс компании</summary>
     public string? Address { get; set; } = null;
+    /// <summary> Количество клиентов компании</summary>
     public int? CountOfUsers { get; set; } = null;
+    /// <summary> стоимость ежемесячных услуг</summary>
     public Decimal? MonthlySubscriptionFee { get; set; } = null;
+    /// <summary> Название компании</summary>
     public string? CompanyName { get; set; } = null;
+    /// <summary> ИНН компании</summary>
     public string? Inn { get; set; } = null;
+    /// <summary> Индекс доверия пользователей этой компании</summary>
     public float? TrustIndex { get; set; } = null;
+    /// <summary> Дата основания компании</summary>
     public string? DateOfFoundation { get; set; } = null;
 
     public TelephoneStation(
@@ -55,6 +62,7 @@ public class TelephoneStation
         Inn = inn;
     }
 
+    /// <summary> переопределение для печати объекта</summary>
     public override string ToString()
     {
         object? currentValue;
@@ -64,16 +72,19 @@ public class TelephoneStation
         return $"ATC=>[{string.Join(", ", paramsAsStr)}]";
     }
 
+    /// <summary> Напечатать название компании</summary>
     public void GetCompanyName()
     {
         Console.WriteLine($"А название этой компании - {CompanyName ?? "<Сокрыто мировым правительством рептилий>"}");
     }
 
+    /// <summary> получить все поля объекта</summary>
     public List<string> GetAllFields()
     {
         return PublicProperties.Select(x => x.Name).ToList();
     }
 
+    /// <summary> установить значение любого поля по его имени</summary>
     public bool SetSomeValue(string targetFieldName, string newFieldValue)
     {
         PropertyInfo? findField;
