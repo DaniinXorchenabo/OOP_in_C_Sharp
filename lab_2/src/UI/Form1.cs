@@ -17,12 +17,10 @@ namespace lab_2
         private List<TelephoneStation> _telephoneStations;
 
         private int _currentStationIndex = -1;
+
         private int CurrentStationIndex
         {
-            get
-            {
-                return this._currentStationIndex;
-            }
+            get { return this._currentStationIndex; }
             set
             {
                 this.LastCurrentStationIndex = this._currentStationIndex < 0 & value > -1
@@ -35,59 +33,66 @@ namespace lab_2
         public int LastCurrentStationIndex { get; private set; } = -1;
         private string? _currentParamName;
         private int _currentParamIndex = -1;
-        private (int SelectionStart, int Length, char LastChar) _pointerPositionControl = (0,  0, '-');
-        
+        private (int SelectionStart, int Length, char LastChar) _pointerPositionControl = (0, 0, '-');
 
         public Form1(List<TelephoneStation> telephoneStationsList)
         {
-            CurrentStationIndex = -1;
-            InitializeComponent();
-            _telephoneStations = telephoneStationsList;
-            _telephoneStations.Select(AddStation);
-            
+            try
+            {
+                CurrentStationIndex = -1;
+                InitializeComponent();
+                _telephoneStations = telephoneStationsList;
+                _telephoneStations.Select(AddStation);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+            }
         }
 
 
         private void SelectStation_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            if (sender is ListBox stationsListBox)
+            try
             {
-                IEnumerable<string> createParams;
-                CurrentStationIndex = stationsListBox.SelectedIndex;
-                listBox2.SelectedIndex = -1;
-                if (LastCurrentStationIndex != CurrentStationIndex)
+                if (sender is ListBox stationsListBox)
                 {
-                    // textBox1.Text = "";
-                    _pointerPositionControl = (0, 0, '-');
-                    textBox1.ReadOnly = true;
-                }
-
-                // _currentStationIndex == -1 при удалении выделенного объекта из списка
-                if (CurrentStationIndex > -1)
-                {
-                    label3.Text = _telephoneStations[CurrentStationIndex].ToLongString();
-                    (createParams = _telephoneStations[(int) CurrentStationIndex]
-                            .ParamsAsStrings())
-                        .Take(listBox2.Items.Count)
-                        .Zip(Enumerable.Range(0, listBox2.Items.Count), (tStationParam, index) =>
-                            listBox2.Items[index] = tStationParam.ToString())
-                        .ToList();
-                    createParams.Skip(listBox2.Items.Count).Select(x => listBox2.Items.Add(x)).ToList();
-                    for (var i = listBox2.Items.Count - 1; i >= createParams.Count(); i--)
+                    IEnumerable<string> createParams;
+                    CurrentStationIndex = stationsListBox.SelectedIndex;
+                    listBox2.SelectedIndex = -1;
+                    if (LastCurrentStationIndex != CurrentStationIndex)
                     {
-                        listBox2.Items.RemoveAt(i);
+                        // textBox1.Text = "";
+                        _pointerPositionControl = (0, 0, '-');
+                        textBox1.ReadOnly = true;
+                    }
+
+                    // _currentStationIndex == -1 при удалении выделенного объекта из списка
+                    if (CurrentStationIndex > -1)
+                    {
+                        label3.Text = _telephoneStations[CurrentStationIndex].ToLongString();
+                        (createParams = _telephoneStations[(int) CurrentStationIndex]
+                                .ParamsAsStrings())
+                            .Take(listBox2.Items.Count)
+                            .Zip(Enumerable.Range(0, listBox2.Items.Count), (tStationParam, index) =>
+                                listBox2.Items[index] = tStationParam.ToString())
+                            .ToList();
+                        createParams.Skip(listBox2.Items.Count).Select(x => listBox2.Items.Add(x)).ToList();
+                        for (var i = listBox2.Items.Count - 1; i >= createParams.Count(); i--)
+                        {
+                            listBox2.Items.RemoveAt(i);
+                        }
+                    }
+                    else
+                    {
+                        label3.Text = "";
                     }
                 }
-                else
-                {
-                    label3.Text = "";
-                }
             }
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-            // throw new System.NotImplementedException();
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+            }
         }
 
         private void createStationButton_Click(object sender, EventArgs e)
@@ -97,24 +102,25 @@ namespace lab_2
 
         private void deleteStationButton_Click(object sender, EventArgs e)
         {
-            if (CurrentStationIndex != null)
+            try
             {
-                RemoveStation((int) CurrentStationIndex);
-                for (var i = listBox2.Items.Count - 1; i > -1; i--)
+                if (CurrentStationIndex != null && CurrentStationIndex != -1)
                 {
-                    
-                    listBox2.Items.RemoveAt(i);
-                }
+                    RemoveStation((int) CurrentStationIndex);
+                    for (var i = listBox2.Items.Count - 1; i > -1; i--)
+                    {
+                        listBox2.Items.RemoveAt(i);
+                    }
 
-                textBox1.Text = "";
-                _currentParamName = null;
+                    textBox1.Text = "";
+                    _currentParamName = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
             }
         }
-
-        // private void listBox1_SelectedIndexChanged_1(object sender, EventArgs e)
-        // {
-        //     // throw new System.NotImplementedException();
-        // }
 
         private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
         {
@@ -123,46 +129,57 @@ namespace lab_2
 
         private void selectedParam_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (sender is ListBox paramsListBox)
+            try
             {
-                _currentParamIndex = paramsListBox.SelectedIndex;
-                // _currentStationIndex == -1 при удалении выделенного объекта из списка
-                if (_currentParamIndex > -1)
+                if (sender is ListBox paramsListBox)
                 {
-                    if (paramsListBox.Items[_currentParamIndex] is string currentParam)
+                    _currentParamIndex = paramsListBox.SelectedIndex;
+                    // _currentStationIndex == -1 при удалении выделенного объекта из списка
+                    if (_currentParamIndex > -1)
                     {
-                        if (CurrentStationIndex > -1)
+                        if (paramsListBox.Items[_currentParamIndex] is string currentParam)
                         {
-                            textBox1.ReadOnly = false;
-                            string? paramValue = _telephoneStations[(int) CurrentStationIndex]
-                                .GetSomeValue(_currentParamName = currentParam.Split('=')[0])?.ToString();
-                            if (paramValue!= null & paramValue != textBox1.Text)
+                            if (CurrentStationIndex > -1)
                             {
-                                int add;
-                                if (textBox1.Text.Length < paramValue.Length)
+                                textBox1.ReadOnly = false;
+                                string? paramValue = _telephoneStations[(int) CurrentStationIndex]
+                                    .GetSomeValue(_currentParamName = currentParam.Split('=')[0])?.ToString();
+                                if (paramValue != null & paramValue != textBox1.Text)
                                 {
-                                    add = 1;
-                                } else if (textBox1.SelectionStart > 0 & textBox1.Text[textBox1.SelectionStart-1] == paramValue[textBox1.SelectionStart-1])
-                                {
-                                    add = -1;
-                                }
-                                else
-                                {
-                                    add = 0;
-                                }
-                                _pointerPositionControl = (_pointerPositionControl.SelectionStart + add,
-                                    paramValue.Length, textBox1.SelectionStart>0?textBox1.Text[textBox1.SelectionStart-1]:'-');
+                                    int add;
+                                    if (textBox1.Text.Length < paramValue.Length)
+                                    {
+                                        add = 1;
+                                    }
+                                    else if (textBox1.SelectionStart > 0 & textBox1.Text[textBox1.SelectionStart - 1] ==
+                                             paramValue[textBox1.SelectionStart - 1])
+                                    {
+                                        add = -1;
+                                    }
+                                    else
+                                    {
+                                        add = 0;
+                                    }
 
-                                textBox1.Text = paramValue;
-                                
-                                textBox1.SelectionStart = _pointerPositionControl.SelectionStart;
-                                // _pointerPositionControl = (textBox1.SelectionStart, textBox1.Text.Length, textBox1.SelectionStart>0?textBox1.Text[textBox1.SelectionStart-1]:'-');
+                                    _pointerPositionControl = (_pointerPositionControl.SelectionStart + add,
+                                        paramValue.Length,
+                                        textBox1.SelectionStart > 0 ? textBox1.Text[textBox1.SelectionStart - 1] : '-');
 
+                                    textBox1.Text = paramValue;
+
+                                    textBox1.SelectionStart = _pointerPositionControl.SelectionStart;
+                                    // _pointerPositionControl = (textBox1.SelectionStart, textBox1.Text.Length, textBox1.SelectionStart>0?textBox1.Text[textBox1.SelectionStart-1]:'-');
+                                }
+                                else if (paramValue == null)
+                                {
+                                    textBox1.Text = "";
+                                    _pointerPositionControl = (0, 0, '-');
+                                }
                             }
-                            else if (paramValue == null)
+                            else
                             {
-                                textBox1.Text = "";
-                                _pointerPositionControl = (0, 0, '-');
+                                // textBox1.Text = "";
+                                // _currentParamName = null;
                             }
                         }
                         else
@@ -171,68 +188,72 @@ namespace lab_2
                             // _currentParamName = null;
                         }
                     }
-                    else
-                    {
-                        // textBox1.Text = "";
-                        // _currentParamName = null;
-                    }
                 }
-
             }
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            // throw new System.NotImplementedException();
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+            }
         }
 
         private void changeSomethingParam_TextBox1(object sender, EventArgs e)
         {
-            if (sender is TextBox currentTextBox){
-                string ? newValue = textBox1.Text;
-                if (CurrentStationIndex > -1 && _currentParamIndex > -1)
+            try
+            {
+                if (sender is TextBox currentTextBox)
                 {
-                    if (newValue == "")
+                    string? newValue = textBox1.Text;
+                    if (CurrentStationIndex > -1 && _currentParamIndex > -1)
                     {
-                        newValue = null;
-                        // _telephoneStations[_currentStationIndex].SetSomeValue(_currentParamName, null);
-                    }
-                    // else
-                    // {
-                    //     
-                    // }
-
-                    if (_telephoneStations[CurrentStationIndex].SetSomeValue(_currentParamName, newValue))
-                    {
-
-                        var lastCurrentParamIndex = (int) _currentParamIndex;
-                        listBox1.Items[CurrentStationIndex] = _telephoneStations[CurrentStationIndex];
-                        listBox1.SelectedIndex = CurrentStationIndex;
-                        label3.Text = _telephoneStations[CurrentStationIndex].ToLongString();
-                        _currentParamIndex = lastCurrentParamIndex;
-                        if (_currentParamIndex > -1)
+                        if (newValue == "")
                         {
-                            listBox2.Items[_currentParamIndex] =
-                                _telephoneStations[CurrentStationIndex].ParamsAsStrings().ToList()[_currentParamIndex];
-                            listBox2.SelectedIndex = _currentParamIndex;
+                            newValue = null;
+                            // _telephoneStations[_currentStationIndex].SetSomeValue(_currentParamName, null);
                         }
-                    }
-                    // textBox1.Text = newValue;
-                }
-                // SelectStation_SelectedIndexChanged_1(sender, e);
-            }
-        }
+                        // else
+                        // {
+                        //     
+                        // }
 
-        private void tableLayoutPanel5_Paint(object sender, PaintEventArgs e)
-        {
-            // throw new System.NotImplementedException();
+                        if (_telephoneStations[CurrentStationIndex].SetSomeValue(_currentParamName, newValue))
+                        {
+                            var lastCurrentParamIndex = (int) _currentParamIndex;
+                            listBox1.Items[CurrentStationIndex] = _telephoneStations[CurrentStationIndex];
+                            listBox1.SelectedIndex = CurrentStationIndex;
+                            label3.Text = _telephoneStations[CurrentStationIndex].ToLongString();
+                            _currentParamIndex = lastCurrentParamIndex;
+                            if (_currentParamIndex > -1)
+                            {
+                                listBox2.Items[_currentParamIndex] =
+                                    _telephoneStations[CurrentStationIndex].ParamsAsStrings().ToList()[
+                                        _currentParamIndex];
+                                listBox2.SelectedIndex = _currentParamIndex;
+                            }
+                        }
+                        // textBox1.Text = newValue;
+                    }
+                    // SelectStation_SelectedIndexChanged_1(sender, e);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+            }
         }
 
         private bool AddStation(TelephoneStation newStation = null)
         {
-            _telephoneStations.Add(newStation ??= new TelephoneStation());
-            listBox1.Items.Add(newStation);
-            textBox2.Text = TelephoneStation.ObjectCounter.ToString();
+            try
+            {
+                _telephoneStations.Add(newStation ??= new TelephoneStation());
+                listBox1.Items.Add(newStation);
+                textBox2.Text = TelephoneStation.ObjectCounter.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+            }
+
             return false;
         }
 
@@ -250,18 +271,19 @@ namespace lab_2
                 deletingStation?.Dispose();
                 textBox2.Text = TelephoneStation.ObjectCounter.ToString();
             }
-
         }
 
         private void RemoveStation(TelephoneStation currentStation)
         {
-            _telephoneStations.Remove(currentStation);
-            listBox1.Items.Remove(currentStation);
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-            // throw new System.NotImplementedException();
+            try
+            {
+                _telephoneStations.Remove(currentStation);
+                listBox1.Items.Remove(currentStation);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+            }
         }
     }
 }
