@@ -68,7 +68,7 @@
             this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 0F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.showAllObjects, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
@@ -86,8 +86,9 @@
             this.showAllObjects.FormattingEnabled = true;
             this.showAllObjects.Location = new System.Drawing.Point(153, 3);
             this.showAllObjects.Name = "showAllObjects";
-            this.showAllObjects.Size = new System.Drawing.Size(144, 433);
+            this.showAllObjects.Size = new System.Drawing.Size(1, 433);
             this.showAllObjects.TabIndex = 2;
+            this.showAllObjects.Visible = false;
             // 
             // tableLayoutPanel2
             // 
@@ -193,7 +194,7 @@
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 1, 1);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(303, 3);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(153, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 3;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -208,7 +209,7 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(489, 444);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(639, 444);
             this.tableLayoutPanel3.TabIndex = 1;
             // 
             // tableLayoutPanel4
@@ -245,15 +246,15 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(443, 398);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(593, 398);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // listRInsertLable
             // 
             this.listRInsertLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.listRInsertLable.Location = new System.Drawing.Point(298, 238);
+            this.listRInsertLable.Location = new System.Drawing.Point(398, 238);
             this.listRInsertLable.Name = "listRInsertLable";
-            this.listRInsertLable.Size = new System.Drawing.Size(141, 78);
+            this.listRInsertLable.Size = new System.Drawing.Size(191, 78);
             this.listRInsertLable.TabIndex = 14;
             this.listRInsertLable.Text = "-";
             this.listRInsertLable.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -261,9 +262,9 @@
             // arrayRInsertLable
             // 
             this.arrayRInsertLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.arrayRInsertLable.Location = new System.Drawing.Point(151, 238);
+            this.arrayRInsertLable.Location = new System.Drawing.Point(201, 238);
             this.arrayRInsertLable.Name = "arrayRInsertLable";
-            this.arrayRInsertLable.Size = new System.Drawing.Size(140, 78);
+            this.arrayRInsertLable.Size = new System.Drawing.Size(190, 78);
             this.arrayRInsertLable.TabIndex = 13;
             this.arrayRInsertLable.Text = "-";
             this.arrayRInsertLable.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -273,7 +274,7 @@
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.label13.Location = new System.Drawing.Point(4, 238);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(140, 78);
+            this.label13.Size = new System.Drawing.Size(190, 78);
             this.label13.TabIndex = 12;
             this.label13.Text = "Случайная выборка";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -281,9 +282,9 @@
             // listCInsertLable
             // 
             this.listCInsertLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.listCInsertLable.Location = new System.Drawing.Point(298, 159);
+            this.listCInsertLable.Location = new System.Drawing.Point(398, 159);
             this.listCInsertLable.Name = "listCInsertLable";
-            this.listCInsertLable.Size = new System.Drawing.Size(141, 78);
+            this.listCInsertLable.Size = new System.Drawing.Size(191, 78);
             this.listCInsertLable.TabIndex = 11;
             this.listCInsertLable.Text = "-";
             this.listCInsertLable.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -291,9 +292,9 @@
             // arrayCInsertLable
             // 
             this.arrayCInsertLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.arrayCInsertLable.Location = new System.Drawing.Point(151, 159);
+            this.arrayCInsertLable.Location = new System.Drawing.Point(201, 159);
             this.arrayCInsertLable.Name = "arrayCInsertLable";
-            this.arrayCInsertLable.Size = new System.Drawing.Size(140, 78);
+            this.arrayCInsertLable.Size = new System.Drawing.Size(190, 78);
             this.arrayCInsertLable.TabIndex = 10;
             this.arrayCInsertLable.Text = "-";
             this.arrayCInsertLable.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -303,7 +304,7 @@
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.label10.Location = new System.Drawing.Point(4, 159);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(140, 78);
+            this.label10.Size = new System.Drawing.Size(190, 78);
             this.label10.TabIndex = 9;
             this.label10.Text = "Последовательная выборка";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -313,7 +314,7 @@
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.label9.Location = new System.Drawing.Point(4, 80);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(140, 78);
+            this.label9.Size = new System.Drawing.Size(190, 78);
             this.label9.TabIndex = 8;
             this.label9.Text = "Добавление";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -325,7 +326,7 @@
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.label7.Location = new System.Drawing.Point(4, 317);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(140, 80);
+            this.label7.Size = new System.Drawing.Size(190, 80);
             this.label7.TabIndex = 6;
             this.label7.Text = "Удаление";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -335,9 +336,9 @@
             this.listDeleteLable.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.listDeleteLable.AutoSize = true;
             this.listDeleteLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.listDeleteLable.Location = new System.Drawing.Point(298, 317);
+            this.listDeleteLable.Location = new System.Drawing.Point(398, 317);
             this.listDeleteLable.Name = "listDeleteLable";
-            this.listDeleteLable.Size = new System.Drawing.Size(141, 80);
+            this.listDeleteLable.Size = new System.Drawing.Size(191, 80);
             this.listDeleteLable.TabIndex = 5;
             this.listDeleteLable.Text = "-";
             this.listDeleteLable.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -347,9 +348,9 @@
             this.arrayDeleteLable.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.arrayDeleteLable.AutoSize = true;
             this.arrayDeleteLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.arrayDeleteLable.Location = new System.Drawing.Point(151, 317);
+            this.arrayDeleteLable.Location = new System.Drawing.Point(201, 317);
             this.arrayDeleteLable.Name = "arrayDeleteLable";
-            this.arrayDeleteLable.Size = new System.Drawing.Size(140, 80);
+            this.arrayDeleteLable.Size = new System.Drawing.Size(190, 80);
             this.arrayDeleteLable.TabIndex = 4;
             this.arrayDeleteLable.Text = "-";
             this.arrayDeleteLable.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -359,9 +360,9 @@
             this.listAddLable.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.listAddLable.AutoSize = true;
             this.listAddLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.listAddLable.Location = new System.Drawing.Point(298, 80);
+            this.listAddLable.Location = new System.Drawing.Point(398, 80);
             this.listAddLable.Name = "listAddLable";
-            this.listAddLable.Size = new System.Drawing.Size(141, 78);
+            this.listAddLable.Size = new System.Drawing.Size(191, 78);
             this.listAddLable.TabIndex = 3;
             this.listAddLable.Text = "-";
             this.listAddLable.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -371,9 +372,9 @@
             this.arrayAddLable.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.arrayAddLable.AutoSize = true;
             this.arrayAddLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.arrayAddLable.Location = new System.Drawing.Point(151, 80);
+            this.arrayAddLable.Location = new System.Drawing.Point(201, 80);
             this.arrayAddLable.Name = "arrayAddLable";
-            this.arrayAddLable.Size = new System.Drawing.Size(140, 78);
+            this.arrayAddLable.Size = new System.Drawing.Size(190, 78);
             this.arrayAddLable.TabIndex = 2;
             this.arrayAddLable.Text = "-";
             this.arrayAddLable.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -383,9 +384,9 @@
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.label2.Location = new System.Drawing.Point(298, 1);
+            this.label2.Location = new System.Drawing.Point(398, 1);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(141, 78);
+            this.label2.Size = new System.Drawing.Size(191, 78);
             this.label2.TabIndex = 1;
             this.label2.Text = "List";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -395,9 +396,9 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.label1.Location = new System.Drawing.Point(151, 1);
+            this.label1.Location = new System.Drawing.Point(201, 1);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(140, 78);
+            this.label1.Size = new System.Drawing.Size(190, 78);
             this.label1.TabIndex = 0;
             this.label1.Text = "Array";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -407,7 +408,7 @@
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.label8.Location = new System.Drawing.Point(4, 1);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(140, 78);
+            this.label8.Size = new System.Drawing.Size(190, 78);
             this.label8.TabIndex = 7;
             this.label8.Text = "\\";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -420,9 +421,8 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Location = new System.Drawing.Point(15, 15);
-            this.MinimumSize = new System.Drawing.Size(470, 185);
+            this.MinimumSize = new System.Drawing.Size(661, 193);
             this.Name = "Form1";
-            this.SizeChanged += new System.EventHandler(this.Form1_Resize);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);

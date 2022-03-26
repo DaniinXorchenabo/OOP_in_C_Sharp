@@ -14,19 +14,14 @@ namespace lab_3
 {
     public partial class Form1 : Form
     {
-        public int autoInsertCount
-        {
-            get => _autoInsertCount;
-            set => _autoInsertCount = value;
-        }
+        public int AutoInsertCount { get; set; } = 100_0000;
 
-        private List<TelephoneStation> _telephoneStationList = new List<TelephoneStation>() { };
-        private TelephoneStation[] _telephoneStationsArray;
-        private int _autoInsertCount = 100_0000;
+        private readonly List<TelephoneStation> _telephoneStationList = new List<TelephoneStation>() { };
+        private readonly TelephoneStation[] _telephoneStationsArray;
 
         public Form1()
         {
-            _telephoneStationsArray = new TelephoneStation[autoInsertCount];
+            _telephoneStationsArray = new TelephoneStation[AutoInsertCount];
             InitializeComponent();
             deleteButtonObj.Enabled = false;
             deleteButtonObj.Visible = false;
@@ -34,38 +29,57 @@ namespace lab_3
 
         private void testingButton_Click(object sender, EventArgs e)
         {
-            var res = GetBenchmarkResults();
-            var uiObjects = new List<List<Label>>()
+            try
             {
-                new List<Label>(){arrayAddLable, listAddLable},
-                new List<Label>(){arrayCInsertLable, listCInsertLable},
-                new List<Label>(){arrayRInsertLable, listRInsertLable},
-                new List<Label>(){arrayDeleteLable, listDeleteLable}
-                
-            };
-            foreach (var coll in uiObjects.Select((value, index) => new {value, index}))
-            {
-                foreach (var obj in coll.value.Select((value, index) => new {value, index}))
+                var res = GetBenchmarkResults();
+                var uiObjects = new List<List<Label>>()
                 {
-                    obj.value.Text = res[coll.index][obj.index];
+                    new() {arrayAddLable, listAddLable},
+                    new() {arrayCInsertLable, listCInsertLable},
+                    new() {arrayRInsertLable, listRInsertLable},
+                    new() {arrayDeleteLable, listDeleteLable}
+                };
+                foreach (var coll in uiObjects.Select((value, index) => new {value, collRes = res[index]}))
+                {
+                    foreach (var obj in coll.value.Select((value, index) => new {value, result = coll.collRes[index]}))
+                    {
+                        obj.value.Text = obj.result;
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+            }
         }
 
         private void createButton_Click(object sender, EventArgs e)
         {
-            createButtonObj.Enabled = false;
-            deleteButtonObj.Enabled = true;
-            CreateItems();
+            try
+            {
+                createButtonObj.Enabled = false;
+                deleteButtonObj.Enabled = true;
+                CreateItems();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+            }
         }
 
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
-            createButtonObj.Enabled = true;
-            deleteButtonObj.Enabled = false;
-            DeleteItems();
+            try
+            {
+                createButtonObj.Enabled = true;
+                deleteButtonObj.Enabled = false;
+                DeleteItems();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+            }
         }
 
         private List<List<string>> GetBenchmarkResults()
@@ -80,7 +94,7 @@ namespace lab_3
         private List<string> CreateItems()
         {
             var startTime1 = System.Diagnostics.Stopwatch.StartNew();
-            for (var i = 0; autoInsertCount > i; i++)
+            for (var i = 0; AutoInsertCount > i; i++)
             {
                 var newTStation = new TelephoneStation();
                 _telephoneStationsArray[i] = newTStation;
@@ -89,7 +103,7 @@ namespace lab_3
             startTime1.Stop();
 
             var startTime2 = System.Diagnostics.Stopwatch.StartNew();
-            for (var i = 0; autoInsertCount > i; i++)
+            for (var i = 0; AutoInsertCount > i; i++)
             {
                 var newTStation = new TelephoneStation();
                 _telephoneStationList.Add(newTStation);
@@ -97,7 +111,7 @@ namespace lab_3
 
             startTime2.Stop();
 
-            for (var i = 0; autoInsertCount > i; i++)
+            for (var i = 0; AutoInsertCount > i; i++)
             {
                 var newTStation = _telephoneStationList[i];
                 _telephoneStationsArray[i] = newTStation;
@@ -122,7 +136,7 @@ namespace lab_3
         private List<string> DeleteItems()
         {
             var startTime1 = System.Diagnostics.Stopwatch.StartNew();
-            for (var i = autoInsertCount - 1; 0 <= i; i--)
+            for (var i = AutoInsertCount - 1; 0 <= i; i--)
             {
                 _telephoneStationsArray[i] = null;
             }
@@ -130,7 +144,7 @@ namespace lab_3
             startTime1.Stop();
 
             var startTime2 = System.Diagnostics.Stopwatch.StartNew();
-            for (var i = autoInsertCount - 1; 0 <= i; i--)
+            for (var i = AutoInsertCount - 1; 0 <= i; i--)
             {
                 _telephoneStationList.RemoveAt(i);
             }
@@ -157,7 +171,7 @@ namespace lab_3
         private List<string> ConsistentlySelectItems()
         {
             var startTime1 = System.Diagnostics.Stopwatch.StartNew();
-            for (var i = autoInsertCount - 1; 0 <= i; i--)
+            for (var i = AutoInsertCount - 1; 0 <= i; i--)
             {
                 var el = _telephoneStationsArray[i];
             }
@@ -192,9 +206,9 @@ namespace lab_3
         {
             var rand = new Random();
             var randomIndexes = new List<int>() { };
-            for (var i = autoInsertCount - 1; 0 <= i; i--)
+            for (var i = AutoInsertCount - 1; 0 <= i; i--)
             {
-                randomIndexes.Add(rand.Next(0, autoInsertCount - 1));
+                randomIndexes.Add(rand.Next(0, AutoInsertCount - 1));
             }
 
             var startTime1 = System.Diagnostics.Stopwatch.StartNew();
@@ -229,23 +243,5 @@ namespace lab_3
 
             return new List<string> {elapsedTime1, elapsedTime2};
         }
-
-        private void Form1_Resize(object sender, System.EventArgs e)
-        {
-            //     Control control = (Control)sender;
-            //
-            //     // Ensure the Form remains square (Height = Width).
-            //     if(control.Size.Height < 185 && control.Size.Width < 470)
-            //     {
-            //         Console.WriteLine($"{control.Size.Width}, {control.Size.Height}");
-            //         control.Size = new Size(control.Size.Width, control.Size.Width);
-            //         FormBorderStyle = FormBorderStyle.Fixed3D;
-            //     }
-            //     else
-            //     {
-            //         FormBorderStyle = FormBorderStyle.Sizable;
-            //     }
-        }
-        
     }
 }
