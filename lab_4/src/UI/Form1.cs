@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,7 +16,7 @@ namespace lab_4
 {
     public partial class Form1 : Form
     {
-        private List<AbstractAts> _telephoneStations;
+        
 
         private int _currentStationIndex = -1;
 
@@ -35,19 +37,37 @@ namespace lab_4
         private int _currentParamIndex = -1;
         private (int SelectionStart, int Length, char LastChar) _pointerPositionControl = (0, 0, '-');
 
-        public Form1(List<AbstractAts> telephoneStationsList)
+        public Form1()
         {
             try
             {
                 CurrentStationIndex = -1;
                 InitializeComponent();
-                _telephoneStations = telephoneStationsList;
-                _telephoneStations.Select(AddStation);
+                TreeNode parentNode = CreateTree(typeof(AbstractAts));
+                
+                treeView1.Nodes.Add(parentNode);
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
             }
+        }
+
+        private TreeNode CreateTree(Type parentType, TreeNode? parentNode = null)
+        {
+            
+            TreeNode newNode = new TreeNode(parentType.Name);
+            parentNode?.Nodes.Add(newNode);
+            Type ourtype = parentType; // Базовый тип
+            IEnumerable<Type> list = Assembly.GetAssembly(ourtype).GetTypes().Where(type => type.IsSubclassOf(ourtype));  // using System.Linq
+
+            foreach(Type itm in list)
+            {
+                CreateTree(itm, newNode);
+            }
+
+            return parentNode ?? newNode;
         }
 
 
@@ -70,8 +90,8 @@ namespace lab_4
                     // _currentStationIndex == -1 при удалении выделенного объекта из списка
                     if (CurrentStationIndex > -1)
                     {
-                        label3.Text = _telephoneStations[CurrentStationIndex].ToLongString();
-                        (createParams = _telephoneStations[(int) CurrentStationIndex]
+                        label3.Text = AbstractAts.AllObjects[CurrentStationIndex].ToLongString();
+                        (createParams = AbstractAts.AllObjects[(int) CurrentStationIndex]
                                 .ParamsAsStrings())
                             .Take(listBox2.Items.Count)
                             .Zip(Enumerable.Range(0, listBox2.Items.Count), (tStationParam, index) =>
@@ -142,7 +162,7 @@ namespace lab_4
                             if (CurrentStationIndex > -1)
                             {
                                 textBox1.ReadOnly = false;
-                                string? paramValue = _telephoneStations[(int) CurrentStationIndex]
+                                string? paramValue = AbstractAts.AllObjects[(int) CurrentStationIndex]
                                     .GetSomeValue(_currentParamName = currentParam.Split('=')[0])?.ToString();
                                 if (paramValue != null & paramValue != textBox1.Text)
                                 {
@@ -208,24 +228,24 @@ namespace lab_4
                         if (newValue == "")
                         {
                             newValue = null;
-                            // _telephoneStations[_currentStationIndex].SetSomeValue(_currentParamName, null);
+                            // AbstractAts.AllObjects[_currentStationIndex].SetSomeValue(_currentParamName, null);
                         }
                         // else
                         // {
                         //     
                         // }
 
-                        if (_telephoneStations[CurrentStationIndex].SetSomeValue(_currentParamName, newValue))
+                        if (AbstractAts.AllObjects[CurrentStationIndex].SetSomeValue(_currentParamName, newValue))
                         {
                             var lastCurrentParamIndex = (int) _currentParamIndex;
-                            listBox1.Items[CurrentStationIndex] = _telephoneStations[CurrentStationIndex];
+                            listBox1.Items[CurrentStationIndex] = AbstractAts.AllObjects[CurrentStationIndex];
                             listBox1.SelectedIndex = CurrentStationIndex;
-                            label3.Text = _telephoneStations[CurrentStationIndex].ToLongString();
+                            label3.Text = AbstractAts.AllObjects[CurrentStationIndex].ToLongString();
                             _currentParamIndex = lastCurrentParamIndex;
                             if (_currentParamIndex > -1)
                             {
                                 listBox2.Items[_currentParamIndex] =
-                                    _telephoneStations[CurrentStationIndex].ParamsAsStrings().ToList()[
+                                    AbstractAts.AllObjects[CurrentStationIndex].ParamsAsStrings().ToList()[
                                         _currentParamIndex];
                                 listBox2.SelectedIndex = _currentParamIndex;
                             }
@@ -241,11 +261,11 @@ namespace lab_4
             }
         }
 
-        private bool AddStation(AbstractAts newStation = null)
+        private bool AddStation(AbstractAts? newStation = null)
         {
             try
             {
-                _telephoneStations.Add(newStation ??= new AbstractAts());
+                newStation ??= new AbstractAts();
                 listBox1.Items.Add(newStation);
                 textBox2.Text = AbstractAts.ObjectCounter.ToString();
             }
@@ -262,8 +282,8 @@ namespace lab_4
             AbstractAts? deletingStation = null;
             try
             {
-                deletingStation = _telephoneStations[index];
-                _telephoneStations.RemoveAt(index);
+                deletingStation = AbstractAts.AllObjects[index];
+                AbstractAts.AllObjects.RemoveAt(index);
                 listBox1.Items.RemoveAt(index);
             }
             finally
@@ -275,14 +295,19 @@ namespace lab_4
 
         private void RemoveStation(AbstractAts currentStation)
         {
+
             try
             {
-                _telephoneStations.Remove(currentStation);
+                AbstractAts.AllObjects.Remove(currentStation);
                 listBox1.Items.Remove(currentStation);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+            }
+            finally
+            {
+                currentStation.Dispose();
             }
         }
     }

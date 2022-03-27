@@ -7,9 +7,10 @@ namespace lab_4;
 
 public class AbstractAts : IDisposable
 {
-    private static readonly IEnumerable<PropertyInfo> PublicProperties;
+    protected static IEnumerable<PropertyInfo> PublicProperties;
     public static int ObjectCounter { get; private set; } = 0;
-    private bool _disposed = false;
+    protected bool Disposed = false;
+    public static List<AbstractAts> AllObjects { get; set; } = new List<AbstractAts>(){};
 
     static AbstractAts()
     {
@@ -42,6 +43,7 @@ public class AbstractAts : IDisposable
     public AbstractAts()
     {
         ObjectCounter++;
+        AbstractAts.AllObjects.Add(this);
     }
 
     /// <summary> переопределение для печати объекта</summary>
@@ -117,15 +119,16 @@ public class AbstractAts : IDisposable
     /// <summary> Деструктор</summary>
     protected virtual void Dispose(bool disposing)
     {
-        if (_disposed) return;
+        if (Disposed) return;
         if (disposing)
         {
             // Освобождаем управляемые ресурсы
         }
 
         // освобождаем неуправляемые объекты
-        _disposed = true;
+        Disposed = true;
         ObjectCounter--;
+        AllObjects.Remove(this);
     }
 
     /// <summary> Деструктор</summary>

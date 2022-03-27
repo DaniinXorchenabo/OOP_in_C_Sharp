@@ -6,7 +6,6 @@ namespace lab_4;
 
 public class MachineStation: AbstractAts
 {
-    private static readonly IEnumerable<PropertyInfo> PublicProperties;
 
     static MachineStation()
     {
