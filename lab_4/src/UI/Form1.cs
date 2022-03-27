@@ -180,11 +180,6 @@ namespace lab_4
             }
         }
 
-        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
-        {
-            // throw new System.NotImplementedException();
-        }
-
         private void selectedParam_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -197,10 +192,12 @@ namespace lab_4
                     {
                         if (paramsListBox.Items[_currentParamIndex] is string currentParam)
                         {
-                            if (CurrentStationIndex > -1)
+                           
+                            if (treeView1.SelectedNode != null && _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode))
                             {
+                                
                                 textBox1.ReadOnly = false;
-                                string? paramValue = AbstractAts.AllObjects[(int) CurrentStationIndex]
+                                string? paramValue = _TreeNodeToTStationObj[treeView1.SelectedNode]
                                     .GetSomeValue(_currentParamName = currentParam.Split('=')[0])?.ToString();
                                 if (paramValue != null & paramValue != textBox1.Text)
                                 {
@@ -261,29 +258,28 @@ namespace lab_4
                 if (sender is TextBox currentTextBox)
                 {
                     string? newValue = textBox1.Text;
-                    if (CurrentStationIndex > -1 && _currentParamIndex > -1)
+                    if (
+                        treeView1.SelectedNode != null 
+                        && _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode) 
+                        && _currentParamIndex > -1)
                     {
                         if (newValue == "")
                         {
                             newValue = null;
-                            // AbstractAts.AllObjects[_currentStationIndex].SetSomeValue(_currentParamName, null);
                         }
-                        // else
-                        // {
-                        //     
-                        // }
 
-                        if (AbstractAts.AllObjects[CurrentStationIndex].SetSomeValue(_currentParamName, newValue))
+                        var currentStation = _TreeNodeToTStationObj[treeView1.SelectedNode];
+
+                        if (currentStation.SetSomeValue(_currentParamName, newValue))
                         {
                             var lastCurrentParamIndex = (int) _currentParamIndex;
-                            listBox1.Items[CurrentStationIndex] = AbstractAts.AllObjects[CurrentStationIndex];
-                            listBox1.SelectedIndex = CurrentStationIndex;
-                            label3.Text = AbstractAts.AllObjects[CurrentStationIndex].ToLongString();
+                            
+                            label3.Text = currentStation.ToLongString();
                             _currentParamIndex = lastCurrentParamIndex;
                             if (_currentParamIndex > -1)
                             {
                                 listBox2.Items[_currentParamIndex] =
-                                    AbstractAts.AllObjects[CurrentStationIndex].ParamsAsStrings().ToList()[
+                                    currentStation.ParamsAsStrings().ToList()[
                                         _currentParamIndex];
                                 listBox2.SelectedIndex = _currentParamIndex;
                             }
