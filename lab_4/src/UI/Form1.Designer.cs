@@ -31,8 +31,8 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.createButton = new System.Windows.Forms.Button();
+            this.deleteButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -43,9 +43,9 @@
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
@@ -82,8 +82,8 @@
             this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Controls.Add(this.button1, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.button2, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(this.createButton, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.deleteButton, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel6, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.treeView1, 0, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
@@ -97,29 +97,29 @@
             this.tableLayoutPanel2.TabIndex = 0;
             this.tableLayoutPanel2.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel2_Paint);
             // 
-            // button1
+            // createButton
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.BackColor = System.Drawing.Color.DarkSeaGreen;
-            this.button1.Location = new System.Drawing.Point(3, 348);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(188, 43);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "create";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.createStationButton_Click);
+            this.createButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.createButton.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.createButton.Location = new System.Drawing.Point(3, 348);
+            this.createButton.Name = "createButton";
+            this.createButton.Size = new System.Drawing.Size(188, 43);
+            this.createButton.TabIndex = 2;
+            this.createButton.Text = "create";
+            this.createButton.UseVisualStyleBackColor = false;
+            this.createButton.Click += new System.EventHandler(this.createStationButton_Click);
             // 
-            // button2
+            // deleteButton
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.BackColor = System.Drawing.Color.LightCoral;
-            this.button2.Location = new System.Drawing.Point(3, 397);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(188, 43);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "delete\r\n";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.deleteStationButton_Click);
+            this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteButton.BackColor = System.Drawing.Color.LightCoral;
+            this.deleteButton.Location = new System.Drawing.Point(3, 397);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(188, 43);
+            this.deleteButton.TabIndex = 3;
+            this.deleteButton.Text = "delete\r\n";
+            this.deleteButton.UseVisualStyleBackColor = false;
+            this.deleteButton.Click += new System.EventHandler(this.deleteStationButton_Click);
             // 
             // tableLayoutPanel6
             // 
@@ -162,6 +162,7 @@
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(188, 304);
             this.treeView1.TabIndex = 5;
+            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.SelectStation_SelectedIndexChanged_1);
             // 
             // tableLayoutPanel3
             // 
@@ -250,6 +251,14 @@
             this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.changeSomethingParam_TextBox1);
             // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(3, 3);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(192, 82);
+            this.listBox1.TabIndex = 1;
+            // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left)));
@@ -267,14 +276,6 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(432, 110);
             this.label3.TabIndex = 3;
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(3, 3);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(192, 82);
-            this.listBox1.TabIndex = 1;
             // 
             // Form1
             // 
@@ -321,8 +322,8 @@
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button createButton;
+        private System.Windows.Forms.Button deleteButton;
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 

@@ -16,10 +16,12 @@ namespace lab_4
 {
     public partial class Form1 : Form
     {
-
         private static Dictionary<TreeNode, AbstractAts> _TreeNodeToTStationObj =
             new Dictionary<TreeNode, AbstractAts>();
-        
+
+        private static Dictionary<TreeNode, Type> _TreeNodeToTStationClass =
+            new Dictionary<TreeNode, Type>();
+
 
         private int _currentStationIndex = -1;
 
@@ -49,12 +51,14 @@ namespace lab_4
                 new CoordinateStation();
                 new CoordinateStation();
                 new MachineStation();
-                
+
                 TreeNode parentNode = CreateTree(typeof(AbstractAts));
                 parentNode.ExpandAll();
-                
-                treeView1.Nodes.Add(parentNode);
 
+                treeView1.Nodes.Add(parentNode);
+                textBox1.ReadOnly = true;
+                createButton.Enabled = false;
+                deleteButton.Enabled = false;
             }
             catch (Exception ex)
             {
@@ -64,20 +68,22 @@ namespace lab_4
 
         private TreeNode CreateTree(Type parentType, TreeNode? parentNode = null)
         {
-            
             TreeNode newNode = new TreeNode(parentType.Name);
+            _TreeNodeToTStationClass[newNode] = parentType;
             parentNode?.Nodes.Add(newNode);
             Type ourtype = parentType; // Базовый тип
-            IEnumerable<Type> list = Assembly.GetAssembly(ourtype).GetTypes().Where(type => type.IsSubclassOf(ourtype));  // using System.Linq
+            IEnumerable<Type>
+                list = Assembly.GetAssembly(ourtype).GetTypes()
+                    .Where(type => type.IsSubclassOf(ourtype)); // using System.Linq
 
             var isBool = true;
-            foreach(var itm in list)
+            foreach (var itm in list)
             {
                 isBool = false;
                 CreateTree(itm, newNode);
             }
 
-            if (isBool &&  parentType.GetProperty("AllObjects").GetValue(parentType)is List<AbstractAts> allObj)
+            if (isBool && parentType.GetProperty("AllObjects").GetValue(parentType) is List<AbstractAts> allObj)
             {
                 foreach (var stationObj in allObj)
                 {
@@ -91,42 +97,54 @@ namespace lab_4
         }
 
 
-        private void SelectStation_SelectedIndexChanged_1(object sender, EventArgs e)
+        private void SelectStation_SelectedIndexChanged_1(object sender, TreeViewEventArgs e)
         {
             try
             {
-                if (sender is ListBox stationsListBox)
+                Type currentClass;
+                TreeView? currentTreeView = sender as TreeView;
+                if (
+                    currentTreeView != null 
+                    && currentTreeView.SelectedNode != null 
+                    && _TreeNodeToTStationClass.ContainsKey(currentTreeView.SelectedNode)
+                    && !(currentClass = _TreeNodeToTStationClass[currentTreeView.SelectedNode]).IsAbstract)
                 {
-                    IEnumerable<string> createParams;
-                    CurrentStationIndex = stationsListBox.SelectedIndex;
+                    textBox1.ReadOnly = true;
+                    createButton.Enabled = true;
+                    deleteButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
-                    if (LastCurrentStationIndex != CurrentStationIndex)
-                    {
-                        // textBox1.Text = "";
-                        _pointerPositionControl = (0, 0, '-');
-                        textBox1.ReadOnly = true;
-                    }
+                }
+                else if (
+                    currentTreeView != null
+                    && currentTreeView.SelectedNode != null
+                    && _TreeNodeToTStationObj.ContainsKey(currentTreeView.SelectedNode))
+                {
+                    var currentObj = _TreeNodeToTStationObj[currentTreeView.SelectedNode];
 
-                    // _currentStationIndex == -1 при удалении выделенного объекта из списка
-                    if (CurrentStationIndex > -1)
+                    listBox2.SelectedIndex = -1;
+                    createButton.Enabled = false;
+                    deleteButton.Enabled = true;
+
+                    IEnumerable<string> createParams;
+
+                    label3.Text = currentObj.ToLongString();
+                    (createParams = currentObj.ParamsAsStrings())
+                        .Take(listBox2.Items.Count)
+                        .Zip(Enumerable.Range(0, listBox2.Items.Count), (tStationParam, index) =>
+                            listBox2.Items[index] = tStationParam.ToString())
+                        .ToList();
+                    createParams.Skip(listBox2.Items.Count).Select(x => listBox2.Items.Add(x)).ToList();
+                    for (var i = listBox2.Items.Count - 1; i >= createParams.Count(); i--)
                     {
-                        label3.Text = AbstractAts.AllObjects[CurrentStationIndex].ToLongString();
-                        (createParams = AbstractAts.AllObjects[(int) CurrentStationIndex]
-                                .ParamsAsStrings())
-                            .Take(listBox2.Items.Count)
-                            .Zip(Enumerable.Range(0, listBox2.Items.Count), (tStationParam, index) =>
-                                listBox2.Items[index] = tStationParam.ToString())
-                            .ToList();
-                        createParams.Skip(listBox2.Items.Count).Select(x => listBox2.Items.Add(x)).ToList();
-                        for (var i = listBox2.Items.Count - 1; i >= createParams.Count(); i--)
-                        {
-                            listBox2.Items.RemoveAt(i);
-                        }
+                        listBox2.Items.RemoveAt(i);
                     }
-                    else
-                    {
-                        label3.Text = "";
-                    }
+                }
+                else
+                {
+                    textBox1.ReadOnly = true;
+                    createButton.Enabled = false;
+                    deleteButton.Enabled = false;
+                    listBox2.SelectedIndex = -1;
                 }
             }
             catch (Exception ex)
@@ -315,7 +333,6 @@ namespace lab_4
 
         private void RemoveStation(AbstractAts currentStation)
         {
-
             try
             {
                 AbstractAts.AllObjects.Remove(currentStation);
