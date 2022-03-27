@@ -322,13 +322,34 @@ namespace lab_4
         {
             try
             {
-                // newStation ??= new AbstractAts();
-                // listBox1.Items.Add(newStation);
-                // textBox2.Text = AbstractAts.ObjectCounter.ToString();
+                Type currentClass;
+                if (
+                    treeView1 != null
+                    && treeView1.SelectedNode != null
+                    && _TreeNodeToTStationClass.ContainsKey(treeView1.SelectedNode)
+                    && !(currentClass = _TreeNodeToTStationClass[treeView1.SelectedNode]).IsAbstract)
+                {
+                    textBox1.ReadOnly = true;
+                    // createButton.Enabled = true;
+                    deleteButton.Enabled = false;
+                    listBox2.SelectedIndex = -1;
+                    
+                    // var attr = currentClass.GetCustomAttribute(typeof(SessionAttribute)) as SessionAttribute;
+                    // if (attr != null)
+                    
+                    AbstractAts newItem = newStation ?? (AbstractAts)Activator.CreateInstance(currentClass);
+                    var newNode = new TreeNode(newItem.ToString());
+                    treeView1.SelectedNode.Nodes.Add(newNode);
+                    _TreeNodeToTStationObj[newNode] = newItem;
+
+
+                    // AbstractAts newItem = new currentClass();
+
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так...");
             }
 
             return false;
