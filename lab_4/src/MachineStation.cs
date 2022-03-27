@@ -6,6 +6,7 @@ namespace lab_4;
 
 public class MachineStation: AbstractAts
 {
+    public static List<AbstractAts> AllObjects { get; set; } = new List<AbstractAts>(){};
 
     static MachineStation()
     {
@@ -18,6 +19,11 @@ public class MachineStation: AbstractAts
     /// Количество валов
     /// </summary>
     private int? CountOfShaft { get; set; } = null;
+
+    public MachineStation() : base()
+    {
+        AllObjects.Add(this);
+    }
 
 
 }

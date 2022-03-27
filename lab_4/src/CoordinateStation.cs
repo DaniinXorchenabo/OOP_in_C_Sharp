@@ -6,6 +6,7 @@ namespace lab_4;
 
 public class CoordinateStation: AbstractAts
 {
+    public new static List<AbstractAts> AllObjects { get; set; } = new List<AbstractAts>(){};
 
     static CoordinateStation()
     {
@@ -22,5 +23,10 @@ public class CoordinateStation: AbstractAts
     /// Количество регистов (принимают и запоминают информацию)
     /// </summary>
     private int? CountOfRegisters { get; set; } = null;
+    
+    public CoordinateStation() : base()
+    {
+        AllObjects.Add(this);
+    }
     
 }

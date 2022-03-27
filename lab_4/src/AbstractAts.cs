@@ -5,11 +5,12 @@ using System.Reflection;
 
 namespace lab_4;
 
-public class AbstractAts : IDisposable
+public abstract class AbstractAts : IDisposable
 {
     protected static IEnumerable<PropertyInfo> PublicProperties;
     public static int ObjectCounter { get; private set; } = 0;
     protected bool Disposed = false;
+    private static List<AbstractAts> _AllTelephoneStations { get; set; } = new List<AbstractAts>(){};
     public static List<AbstractAts> AllObjects { get; set; } = new List<AbstractAts>(){};
 
     static AbstractAts()
@@ -43,7 +44,8 @@ public class AbstractAts : IDisposable
     public AbstractAts()
     {
         ObjectCounter++;
-        AbstractAts.AllObjects.Add(this);
+        AbstractAts._AllTelephoneStations.Add(this);
+        
     }
 
     /// <summary> переопределение для печати объекта</summary>
@@ -128,7 +130,7 @@ public class AbstractAts : IDisposable
         // освобождаем неуправляемые объекты
         Disposed = true;
         ObjectCounter--;
-        AllObjects.Remove(this);
+        _AllTelephoneStations.Remove(this);
     }
 
     /// <summary> Деструктор</summary>

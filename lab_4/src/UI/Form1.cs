@@ -16,6 +16,9 @@ namespace lab_4
 {
     public partial class Form1 : Form
     {
+
+        private static Dictionary<TreeNode, AbstractAts> _TreeNodeToTStationObj =
+            new Dictionary<TreeNode, AbstractAts>();
         
 
         private int _currentStationIndex = -1;
@@ -43,7 +46,12 @@ namespace lab_4
             {
                 CurrentStationIndex = -1;
                 InitializeComponent();
+                new CoordinateStation();
+                new CoordinateStation();
+                new MachineStation();
+                
                 TreeNode parentNode = CreateTree(typeof(AbstractAts));
+                parentNode.ExpandAll();
                 
                 treeView1.Nodes.Add(parentNode);
 
@@ -62,9 +70,21 @@ namespace lab_4
             Type ourtype = parentType; // Базовый тип
             IEnumerable<Type> list = Assembly.GetAssembly(ourtype).GetTypes().Where(type => type.IsSubclassOf(ourtype));  // using System.Linq
 
-            foreach(Type itm in list)
+            var isBool = true;
+            foreach(var itm in list)
             {
+                isBool = false;
                 CreateTree(itm, newNode);
+            }
+
+            if (isBool &&  parentType.GetProperty("AllObjects").GetValue(parentType)is List<AbstractAts> allObj)
+            {
+                foreach (var stationObj in allObj)
+                {
+                    TreeNode currentNode = new TreeNode(stationObj.ToString());
+                    newNode.Nodes.Add(currentNode);
+                    _TreeNodeToTStationObj[currentNode] = stationObj;
+                }
             }
 
             return parentNode ?? newNode;
@@ -265,9 +285,9 @@ namespace lab_4
         {
             try
             {
-                newStation ??= new AbstractAts();
-                listBox1.Items.Add(newStation);
-                textBox2.Text = AbstractAts.ObjectCounter.ToString();
+                // newStation ??= new AbstractAts();
+                // listBox1.Items.Add(newStation);
+                // textBox2.Text = AbstractAts.ObjectCounter.ToString();
             }
             catch (Exception ex)
             {
