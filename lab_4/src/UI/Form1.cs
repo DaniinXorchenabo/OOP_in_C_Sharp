@@ -113,18 +113,26 @@ namespace lab_4
                     createButton.Enabled = true;
                     deleteButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
+                    
+                    for (var i = listBox2.Items.Count - 1; i >= 0; i--)
+                    {
+                        listBox2.Items.RemoveAt(i);
+                    }
+                    textBox1.Text = "";
+                    
                 }
                 else if (
                     currentTreeView != null
                     && currentTreeView.SelectedNode != null
                     && _TreeNodeToTStationObj.ContainsKey(currentTreeView.SelectedNode))
                 {
-                    var currentObj = _TreeNodeToTStationObj[currentTreeView.SelectedNode];
-
                     listBox2.SelectedIndex = -1;
                     createButton.Enabled = false;
                     deleteButton.Enabled = true;
+                    textBox1.Text = "";
+                    textBox1.ReadOnly = true;
 
+                    var currentObj = _TreeNodeToTStationObj[currentTreeView.SelectedNode];
                     IEnumerable<string> createParams;
 
                     label3.Text = currentObj.ToLongString();
@@ -138,6 +146,7 @@ namespace lab_4
                     {
                         listBox2.Items.RemoveAt(i);
                     }
+
                 }
                 else
                 {
@@ -145,6 +154,13 @@ namespace lab_4
                     createButton.Enabled = false;
                     deleteButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
+                    
+                    for (var i = listBox2.Items.Count - 1; i >= 0; i--)
+                    {
+                        listBox2.Items.RemoveAt(i);
+                    }
+
+                    textBox1.Text = "";
                 }
             }
             catch (Exception ex)
