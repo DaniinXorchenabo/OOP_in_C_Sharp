@@ -7,7 +7,13 @@ namespace lab_4;
 
 public abstract class AbstractAts : IDisposable
 {
-    protected static IEnumerable<PropertyInfo> PublicProperties;
+    private static IEnumerable<PropertyInfo> _PublicProperties;
+    protected virtual IEnumerable<PropertyInfo> PublicProperties
+    {
+        get => AbstractAts._PublicProperties;
+        set => AbstractAts._PublicProperties = value;
+    }
+
     public static int ObjectCounter { get; private set; } = 0;
     protected bool Disposed = false;
     private static List<AbstractAts> _AllTelephoneStations { get; set; } = new List<AbstractAts>(){};
@@ -15,7 +21,7 @@ public abstract class AbstractAts : IDisposable
 
     static AbstractAts()
     {
-        PublicProperties = typeof(AbstractAts)
+        _PublicProperties = typeof(AbstractAts)
             .GetProperties()
             .Where(x => x.GetMethod != null && x.GetMethod.IsPublic && !x.GetMethod.IsStatic);
     }
