@@ -62,7 +62,7 @@ namespace lab_4
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
             }
         }
 
@@ -83,7 +83,7 @@ namespace lab_4
                 CreateTree(itm, newNode);
             }
 
-            if (isBool && parentType.GetProperty("AllObjects").GetValue(parentType) is List<AbstractAts> allObj)
+            if (isBool && parentType.GetProperty("_AllObjects").GetValue(parentType) is List<AbstractAts> allObj)
             {
                 foreach (var stationObj in allObj)
                 {
@@ -104,8 +104,8 @@ namespace lab_4
                 Type currentClass;
                 TreeView? currentTreeView = sender as TreeView;
                 if (
-                    currentTreeView != null 
-                    && currentTreeView.SelectedNode != null 
+                    currentTreeView != null
+                    && currentTreeView.SelectedNode != null
                     && _TreeNodeToTStationClass.ContainsKey(currentTreeView.SelectedNode)
                     && !(currentClass = _TreeNodeToTStationClass[currentTreeView.SelectedNode]).IsAbstract)
                 {
@@ -113,13 +113,13 @@ namespace lab_4
                     createButton.Enabled = true;
                     deleteButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
-                    
+
                     for (var i = listBox2.Items.Count - 1; i >= 0; i--)
                     {
                         listBox2.Items.RemoveAt(i);
                     }
+
                     textBox1.Text = "";
-                    
                 }
                 else if (
                     currentTreeView != null
@@ -146,7 +146,6 @@ namespace lab_4
                     {
                         listBox2.Items.RemoveAt(i);
                     }
-
                 }
                 else
                 {
@@ -154,7 +153,7 @@ namespace lab_4
                     createButton.Enabled = false;
                     deleteButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
-                    
+
                     for (var i = listBox2.Items.Count - 1; i >= 0; i--)
                     {
                         listBox2.Items.RemoveAt(i);
@@ -165,7 +164,7 @@ namespace lab_4
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
             }
         }
 
@@ -178,9 +177,14 @@ namespace lab_4
         {
             try
             {
-                if (CurrentStationIndex != null && CurrentStationIndex != -1)
+                if (
+                    treeView1 != null
+                    && treeView1.SelectedNode != null
+                    && _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode))
                 {
-                    RemoveStation((int) CurrentStationIndex);
+                    var currentObj = _TreeNodeToTStationObj[treeView1.SelectedNode];
+
+                    RemoveStation(currentObj);
                     for (var i = listBox2.Items.Count - 1; i > -1; i--)
                     {
                         listBox2.Items.RemoveAt(i);
@@ -188,11 +192,15 @@ namespace lab_4
 
                     textBox1.Text = "";
                     _currentParamName = null;
+                    textBox1.ReadOnly = true;
+                    createButton.Enabled = false;
+                    deleteButton.Enabled = false;
+                    listBox2.SelectedIndex = -1;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
             }
         }
 
@@ -208,10 +216,9 @@ namespace lab_4
                     {
                         if (paramsListBox.Items[_currentParamIndex] is string currentParam)
                         {
-                           
-                            if (treeView1.SelectedNode != null && _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode))
+                            if (treeView1.SelectedNode != null &&
+                                _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode))
                             {
-                                
                                 textBox1.ReadOnly = false;
                                 string? paramValue = _TreeNodeToTStationObj[treeView1.SelectedNode]
                                     .GetSomeValue(_currentParamName = currentParam.Split('=')[0])?.ToString();
@@ -263,7 +270,7 @@ namespace lab_4
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
             }
         }
 
@@ -275,8 +282,8 @@ namespace lab_4
                 {
                     string? newValue = textBox1.Text;
                     if (
-                        treeView1.SelectedNode != null 
-                        && _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode) 
+                        treeView1.SelectedNode != null
+                        && _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode)
                         && _currentParamIndex > -1)
                     {
                         if (newValue == "")
@@ -289,7 +296,7 @@ namespace lab_4
                         if (currentStation.SetSomeValue(_currentParamName, newValue))
                         {
                             var lastCurrentParamIndex = (int) _currentParamIndex;
-                            
+
                             label3.Text = currentStation.ToLongString();
                             _currentParamIndex = lastCurrentParamIndex;
                             if (_currentParamIndex > -1)
@@ -307,7 +314,7 @@ namespace lab_4
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
             }
         }
 
@@ -321,38 +328,29 @@ namespace lab_4
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
             }
 
             return false;
         }
 
-        private void RemoveStation(int index)
-        {
-            AbstractAts? deletingStation = null;
-            try
-            {
-                deletingStation = AbstractAts.AllObjects[index];
-                AbstractAts.AllObjects.RemoveAt(index);
-                listBox1.Items.RemoveAt(index);
-            }
-            finally
-            {
-                deletingStation?.Dispose();
-                textBox2.Text = AbstractAts.ObjectCounter.ToString();
-            }
-        }
 
         private void RemoveStation(AbstractAts currentStation)
         {
             try
             {
-                AbstractAts.AllObjects.Remove(currentStation);
-                listBox1.Items.Remove(currentStation);
+                if (_TreeNodeToTStationObj.ContainsValue(currentStation))
+                {
+                    var curentNode = _TreeNodeToTStationObj
+                        .Where(x => x.Value == currentStation)
+                        .FirstOrDefault().Key;
+                    _TreeNodeToTStationObj.Remove(curentNode);
+                    curentNode.Parent.Nodes.Remove(curentNode);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Что-то пошло не так...", ex.ToString());
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
             }
             finally
             {

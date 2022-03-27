@@ -7,7 +7,9 @@ namespace lab_4;
 
 public class MachineStation: AbstractAts
 {
-    public static List<AbstractAts> AllObjects { get; set; } = new List<AbstractAts>(){};
+    public new static List<AbstractAts> _AllObjects { get; set; } = new List<AbstractAts>(){};
+    public override List<AbstractAts> AllObjects { get => _AllObjects; set => _AllObjects = value; }
+    
     private static IEnumerable<PropertyInfo> _PublicProperties;
     protected override IEnumerable<PropertyInfo> PublicProperties
     {
@@ -29,7 +31,7 @@ public class MachineStation: AbstractAts
 
     public MachineStation() : base()
     {
-        AllObjects.Add(this);
+        _AllObjects.Add(this);
     }
     
     /// <summary> установить значение любого поля по его имени</summary>

@@ -17,7 +17,8 @@ public abstract class AbstractAts : IDisposable
     public static int ObjectCounter { get; private set; } = 0;
     protected bool Disposed = false;
     private static List<AbstractAts> _AllTelephoneStations { get; set; } = new List<AbstractAts>(){};
-    public static List<AbstractAts> AllObjects { get; set; } = new List<AbstractAts>(){};
+    public static List<AbstractAts> _AllObjects { get; set; } = new List<AbstractAts>(){};
+    public virtual List<AbstractAts> AllObjects { get => _AllObjects; set => _AllObjects = value; }
 
     static AbstractAts()
     {
@@ -137,6 +138,7 @@ public abstract class AbstractAts : IDisposable
         Disposed = true;
         ObjectCounter--;
         _AllTelephoneStations.Remove(this);
+        AllObjects.Remove(this);
     }
 
     /// <summary> Деструктор</summary>
