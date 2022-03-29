@@ -63,7 +63,7 @@ namespace lab_4
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так...");
             }
         }
 
@@ -165,7 +165,7 @@ namespace lab_4
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так...");
             }
         }
 
@@ -201,7 +201,7 @@ namespace lab_4
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так...");
             }
         }
 
@@ -271,7 +271,7 @@ namespace lab_4
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так...");
             }
         }
 
@@ -315,7 +315,6 @@ namespace lab_4
                                 }
 
                                 listBox2.SelectedIndex = _currentParamIndex;
-                                
                             }
                         }
                         // textBox1.Text = newValue;
@@ -325,7 +324,7 @@ namespace lab_4
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так...");
             }
         }
 
@@ -344,11 +343,11 @@ namespace lab_4
                     // createButton.Enabled = true;
                     deleteButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
-                    
+
                     // var attr = currentClass.GetCustomAttribute(typeof(SessionAttribute)) as SessionAttribute;
                     // if (attr != null)
-                    
-                    AbstractAts newItem = newStation ?? (AbstractAts)Activator.CreateInstance(currentClass);
+
+                    AbstractAts newItem = newStation ?? (AbstractAts) Activator.CreateInstance(currentClass);
                     textBox2.Text = AbstractAts.ObjectCounter.ToString();
                     var newNode = new TreeNode(newItem.ToString());
                     treeView1.SelectedNode.Nodes.Add(newNode);
@@ -356,7 +355,6 @@ namespace lab_4
 
 
                     // AbstractAts newItem = new currentClass();
-
                 }
             }
             catch (Exception ex)
@@ -383,12 +381,13 @@ namespace lab_4
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так..." );
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так...");
             }
             finally
             {
                 currentStation.Dispose();
             }
+
             textBox2.Text = AbstractAts.ObjectCounter.ToString();
         }
     }

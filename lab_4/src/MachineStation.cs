@@ -5,12 +5,18 @@ using System.Reflection;
 
 namespace lab_4;
 
-public class MachineStation: AbstractAts
+public class MachineStation : AbstractAts
 {
-    public new static List<AbstractAts> _AllObjects { get; set; } = new List<AbstractAts>(){};
-    protected override List<AbstractAts> AllObjects { get => _AllObjects; set => _AllObjects = value; }
-    
+    public new static List<AbstractAts> _AllObjects { get; set; } = new List<AbstractAts>() { };
+
+    protected override List<AbstractAts> AllObjects
+    {
+        get => _AllObjects;
+        set => _AllObjects = value;
+    }
+
     private static IEnumerable<PropertyInfo> _PublicProperties;
+
     protected override IEnumerable<PropertyInfo> PublicProperties
     {
         get => MachineStation._PublicProperties;
@@ -23,7 +29,7 @@ public class MachineStation: AbstractAts
             .GetProperties()
             .Where(x => x.GetMethod != null && x.GetMethod.IsPublic && !x.GetMethod.IsStatic);
     }
-    
+
     /// <summary>
     /// Количество валов
     /// </summary>
