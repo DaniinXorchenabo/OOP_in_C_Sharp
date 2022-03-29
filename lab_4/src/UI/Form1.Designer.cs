@@ -43,7 +43,6 @@
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
@@ -230,7 +229,6 @@
             this.tableLayoutPanel7.ColumnCount = 1;
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel7.Controls.Add(this.textBox1, 0, 1);
-            this.tableLayoutPanel7.Controls.Add(this.listBox1, 0, 0);
             this.tableLayoutPanel7.Location = new System.Drawing.Point(73, 3);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 3;
@@ -249,14 +247,6 @@
             this.textBox1.Size = new System.Drawing.Size(350, 20);
             this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.changeSomethingParam_TextBox1);
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(3, 3);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(192, 82);
-            this.listBox1.TabIndex = 1;
             // 
             // label1
             // 
@@ -299,8 +289,6 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
-
-        private System.Windows.Forms.ListBox listBox1;
 
         private System.Windows.Forms.TreeView treeView1;
 

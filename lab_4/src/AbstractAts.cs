@@ -18,7 +18,7 @@ public abstract class AbstractAts : IDisposable
     protected bool Disposed = false;
     private static List<AbstractAts> _AllTelephoneStations { get; set; } = new List<AbstractAts>(){};
     public static List<AbstractAts> _AllObjects { get; set; } = new List<AbstractAts>(){};
-    public virtual List<AbstractAts> AllObjects { get => _AllObjects; set => _AllObjects = value; }
+    protected virtual List<AbstractAts> AllObjects { get => _AllObjects; set => _AllObjects = value; }
 
     static AbstractAts()
     {

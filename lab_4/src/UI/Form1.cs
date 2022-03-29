@@ -59,6 +59,7 @@ namespace lab_4
                 textBox1.ReadOnly = true;
                 createButton.Enabled = false;
                 deleteButton.Enabled = false;
+                textBox2.Text = AbstractAts.ObjectCounter.ToString();
             }
             catch (Exception ex)
             {
@@ -304,7 +305,17 @@ namespace lab_4
                                 listBox2.Items[_currentParamIndex] =
                                     currentStation.ParamsAsStrings().ToList()[
                                         _currentParamIndex];
+                                if (treeView1.SelectedNode != null
+                                    && _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode))
+                                {
+                                    var currentNode = treeView1.SelectedNode;
+                                    var currentObj = _TreeNodeToTStationObj[currentNode];
+                                    treeView1.SelectedNode.Text = currentObj.ToString();
+                                    treeView1.SelectedNode = currentNode;
+                                }
+
                                 listBox2.SelectedIndex = _currentParamIndex;
+                                
                             }
                         }
                         // textBox1.Text = newValue;
@@ -338,6 +349,7 @@ namespace lab_4
                     // if (attr != null)
                     
                     AbstractAts newItem = newStation ?? (AbstractAts)Activator.CreateInstance(currentClass);
+                    textBox2.Text = AbstractAts.ObjectCounter.ToString();
                     var newNode = new TreeNode(newItem.ToString());
                     treeView1.SelectedNode.Nodes.Add(newNode);
                     _TreeNodeToTStationObj[newNode] = newItem;
@@ -377,6 +389,7 @@ namespace lab_4
             {
                 currentStation.Dispose();
             }
+            textBox2.Text = AbstractAts.ObjectCounter.ToString();
         }
     }
 }
