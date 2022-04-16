@@ -42,10 +42,15 @@ public class CoordinateStation : AbstractAts
 
     public CoordinateStation() : base()
     {
-        _AllObjects.Add(this);
+        _AllObjects += this;
     }
     public CoordinateStation(Random random) : base(random)
     {
-        _AllObjects.Add(this);
+        _AllObjects += this;
+    }
+
+    public override void CreateCustomizedName()
+    {
+        CompanyName = "Кастомное имя координатной станции";
     }
 }

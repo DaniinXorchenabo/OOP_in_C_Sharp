@@ -37,10 +37,14 @@ public class MachineStation : AbstractAts
 
     public MachineStation() : base()
     {
-        _AllObjects.Add(this);
+        _AllObjects += this;
     }
     public MachineStation(Random random) : base(random)
     {
-        _AllObjects.Add(this);
+        _AllObjects += this;
+    }
+    public override void CreateCustomizedName()
+    {
+        CompanyName = "Кастомное имя механической станции";
     }
 }

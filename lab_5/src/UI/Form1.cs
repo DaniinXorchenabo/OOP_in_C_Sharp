@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,6 +18,7 @@ namespace lab_5
     public partial class Form1 : Form
     {
         private static Random _random = null!;
+
         private static Dictionary<TreeNode, AbstractAts> _TreeNodeToTStationObj =
             new Dictionary<TreeNode, AbstractAts>();
 
@@ -65,6 +67,7 @@ namespace lab_5
                 textBox1.ReadOnly = true;
                 createButton.Enabled = false;
                 deleteButton.Enabled = false;
+                createCustomizedNameButton.Enabled = false;
                 textBox2.Text = AbstractAts.ObjectCounter.ToString();
             }
             catch (Exception ex)
@@ -80,7 +83,7 @@ namespace lab_5
             parentNode?.Nodes.Add(newNode);
             Type ourtype = parentType; // Базовый тип
             IEnumerable<Type> list = Assembly.GetAssembly(ourtype).GetTypes()
-                    .Where(type => type.IsSubclassOf(ourtype)); // using System.Linq
+                .Where(type => type.IsSubclassOf(ourtype)); // using System.Linq
 
             var isBool = true;
             foreach (var itm in list)
@@ -118,6 +121,7 @@ namespace lab_5
                     textBox1.ReadOnly = true;
                     createButton.Enabled = true;
                     deleteButton.Enabled = false;
+                    createCustomizedNameButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
 
                     for (var i = listBox2.Items.Count - 1; i >= 0; i--)
@@ -135,6 +139,7 @@ namespace lab_5
                     listBox2.SelectedIndex = -1;
                     createButton.Enabled = false;
                     deleteButton.Enabled = true;
+                    createCustomizedNameButton.Enabled = true;
                     textBox1.Text = "";
                     textBox1.ReadOnly = true;
 
@@ -158,6 +163,7 @@ namespace lab_5
                     textBox1.ReadOnly = true;
                     createButton.Enabled = false;
                     deleteButton.Enabled = false;
+                    createCustomizedNameButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
 
                     for (var i = listBox2.Items.Count - 1; i >= 0; i--)
@@ -201,8 +207,12 @@ namespace lab_5
                     textBox1.ReadOnly = true;
                     createButton.Enabled = false;
                     deleteButton.Enabled = false;
+                    createCustomizedNameButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
                 }
+
+                ActiveControl = textBox2;
+                if (treeView1 != null) treeView1.SelectedNode = null;
             }
             catch (Exception ex)
             {
@@ -345,7 +355,8 @@ namespace lab_5
                     && !(currentClass = _TreeNodeToTStationClass[treeView1.SelectedNode]).IsAbstract)
                 {
                     textBox1.ReadOnly = true;
-                    // createButton.Enabled = true;
+                    // createButton.Enabled = true;c
+                    createCustomizedNameButton.Enabled = false;
                     deleteButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
 
@@ -394,6 +405,52 @@ namespace lab_5
             }
 
             textBox2.Text = AbstractAts.ObjectCounter.ToString();
+        }
+
+        private void createCustomizedNameButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (treeView1.SelectedNode != null &&
+                    _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode))
+                {
+                    _TreeNodeToTStationObj[treeView1.SelectedNode].CreateCustomizedName();
+                    var currentStation = _TreeNodeToTStationObj[treeView1.SelectedNode];
+
+                    var lastCurrentParamIndex = (int) _currentParamIndex;
+
+                    label3.Text = currentStation.ToLongString();
+
+                    int index = 0;
+                    int targetIndex = 0;
+                    foreach (var someParam in currentStation.ParamsAsStrings())
+                    {
+                        if (((someParam as string)!).StartsWith("CompanyName="))
+                        {
+                            targetIndex = index;
+                        }
+
+                        index++;
+                    }
+
+
+                    listBox2.Items[targetIndex] = currentStation.ParamsAsStrings().ToList()[targetIndex];
+                    if (treeView1.SelectedNode != null
+                        && _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode))
+                    {
+                        var currentNode = treeView1.SelectedNode;
+                        var currentObj = _TreeNodeToTStationObj[currentNode];
+                        treeView1.SelectedNode.Text = currentObj.ToString();
+                        treeView1.SelectedNode = currentNode;
+                    }
+
+                    listBox2.SelectedIndex = _currentParamIndex;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.ToString(), "Что-то пошло не так...");
+            }
         }
     }
 }

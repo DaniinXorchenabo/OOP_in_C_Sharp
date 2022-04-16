@@ -58,13 +58,13 @@ public abstract class AbstractAts : IDisposable
     public AbstractAts()
     {
         ObjectCounter++;
-        AbstractAts._AllTelephoneStations.Add(this);
+        AbstractAts._AllTelephoneStations += this;
     }
 
     public AbstractAts(Random random)
     {
         ObjectCounter++;
-        AbstractAts._AllTelephoneStations.Add(this);
+        AbstractAts._AllTelephoneStations += this;
         foreach (var field in PublicProperties)
         {
             if (field.PropertyType == typeof(string))
@@ -196,8 +196,8 @@ public abstract class AbstractAts : IDisposable
         // освобождаем неуправляемые объекты
         Disposed = true;
         ObjectCounter--;
-        _AllTelephoneStations.Remove(this);
-        AllObjects.Remove(this);
+        _AllTelephoneStations -= this;
+        AllObjects -= this;
     }
 
     /// <summary> Деструктор</summary>
@@ -205,4 +205,18 @@ public abstract class AbstractAts : IDisposable
     {
         Dispose(false);
     }
+
+    public static List<AbstractAts> operator +(List<AbstractAts> list, AbstractAts station)
+    {
+        list.Add(station);
+        return list;
+    }
+    public static List<AbstractAts> operator -(List<AbstractAts> list, AbstractAts station)
+    {
+        list.Remove(station);
+        return list;
+    }
+
+    public abstract void CreateCustomizedName();
+
 }
