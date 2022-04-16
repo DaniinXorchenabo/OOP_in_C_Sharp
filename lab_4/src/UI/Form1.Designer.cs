@@ -103,7 +103,7 @@
             this.createButton.Name = "createButton";
             this.createButton.Size = new System.Drawing.Size(188, 43);
             this.createButton.TabIndex = 2;
-            this.createButton.Text = "create";
+            this.createButton.Text = "Создать";
             this.createButton.UseVisualStyleBackColor = false;
             this.createButton.Click += new System.EventHandler(this.createStationButton_Click);
             // 
@@ -115,7 +115,7 @@
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(188, 43);
             this.deleteButton.TabIndex = 3;
-            this.deleteButton.Text = "delete\r\n";
+            this.deleteButton.Text = "Удалить";
             this.deleteButton.UseVisualStyleBackColor = false;
             this.deleteButton.Click += new System.EventHandler(this.deleteStationButton_Click);
             // 
@@ -273,7 +273,7 @@
             this.ClientSize = new System.Drawing.Size(800, 449);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Лабораторная работа № 4";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
