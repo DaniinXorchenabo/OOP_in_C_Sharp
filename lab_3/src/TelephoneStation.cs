@@ -62,8 +62,34 @@ public class TelephoneStation : IDisposable
     {
         ObjectCounter++;
     }
+    
+    public TelephoneStation(Random random)
+    {
+        foreach (var field in GetAllFields())
+        {
+            SetSomeValue(field, GenerateChar(5, random));
+        }
+        ObjectCounter++;
+    }
 
+    public string GenerateChar(Random random)
+    {
+       
 
+        return Convert.ToChar(Convert.ToInt32(Math.Floor(10 * random.NextDouble() + 48))).ToString();
+    }
+
+    public string GenerateChar(int count, Random random)
+    {        
+        string randomString = "";
+
+        for (int i = 0; i < count; i++)
+        {
+            randomString += GenerateChar(random);
+        }
+
+        return randomString;
+    }
     public TelephoneStation(string? companyName)
     {
         CompanyName = companyName;
@@ -78,13 +104,13 @@ public class TelephoneStation : IDisposable
     }
 
     /// <summary> переопределение для печати объекта</summary>
-    public override string ToString()
-    {
-        return $"{CompanyName ?? "<unknown>"}";
-    }
+    // public override string ToString()
+    // {
+    //     return $"{CompanyName ?? "<unknown>"}";
+    // }
 
     /// <summary> Получить полный</summary>
-    public string ToLongString()
+    public override string ToString()
     {
         return $"ATC=>[{string.Join(", ", ParamsAsStrings())}]";
     }

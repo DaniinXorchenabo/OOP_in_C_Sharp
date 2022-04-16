@@ -14,9 +14,11 @@ namespace lab_3
 {
     public partial class Form1 : Form
     {
-        public int AutoInsertCount { get; set; } = 100_0000;
+        public int AutoInsertCount { get; set; } = 100_0;
 
         private readonly List<TelephoneStation> _telephoneStationList = new List<TelephoneStation>() { };
+        private readonly List<TelephoneStation> _telephoneStationList2 = new List<TelephoneStation>() { };
+
         private readonly TelephoneStation[] _telephoneStationsArray;
 
         public Form1()
@@ -46,6 +48,8 @@ namespace lab_3
                         obj.value.Text = obj.result;
                     }
                 }
+
+                ShowList();
             }
             catch (Exception ex)
             {
@@ -93,6 +97,7 @@ namespace lab_3
 
         private List<string> CreateItems()
         {
+            
             var startTime1 = System.Diagnostics.Stopwatch.StartNew();
             for (var i = 0; AutoInsertCount > i; i++)
             {
@@ -242,6 +247,26 @@ namespace lab_3
                 resultTime2.Milliseconds);
 
             return new List<string> {elapsedTime1, elapsedTime2};
+        }
+
+        private void ShowList()
+        {
+            Random random = new Random();
+            for (var i = 0; AutoInsertCount > i; i++)
+            {
+                var newTStation = new TelephoneStation(random);
+                _telephoneStationList2.Add(newTStation);
+            }
+            foreach (var t in _telephoneStationList2.Take(100))
+            {
+                showAllObjects.Items.Add(t.ToString());
+            }
+        }
+
+        private void showAllObjects_Click(object sender, EventArgs e)
+        {
+            // Console.WriteLine(); 
+            MessageBox.Show(this, (sender as ListView).SelectedItems[0].Text, "Текущий объект");
         }
     }
 }
