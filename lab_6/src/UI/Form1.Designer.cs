@@ -291,7 +291,7 @@ namespace lab_6
             this.ClientSize = new System.Drawing.Size(800, 493);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
-            this.Text = "Лабораторная работа № 5";
+            this.Text = "Лабораторная работа № 6";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
