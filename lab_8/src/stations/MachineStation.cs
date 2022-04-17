@@ -2,21 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Xml.Serialization;
 
 namespace lab_8;
-
+[Serializable]
 public class MachineStation : AbstractAts
 {
+    [XmlIgnore] 
+    public static Type Serializer { get; set; } = null!;
+    [XmlIgnore]
     public new static PhoneStationDict<Guid, AbstractAts> _AllObjects { get; set; } = new PhoneStationDict<Guid, AbstractAts>{ };
 
+    [XmlIgnore]
     protected override PhoneStationDict<Guid, AbstractAts> AllObjects
     {
         get => _AllObjects;
         set => _AllObjects = value;
     }
 
+    [XmlIgnore]
     private static IEnumerable<PropertyInfo> _PublicProperties;
 
+    [XmlIgnore]
     protected override IEnumerable<PropertyInfo> PublicProperties
     {
         get => MachineStation._PublicProperties;
@@ -25,6 +32,7 @@ public class MachineStation : AbstractAts
 
     static MachineStation()
     {
+        Serializer = typeof(AbstractAtsCollection<MachineStation>);
         _PublicProperties = typeof(MachineStation)
             .GetProperties()
             .Where(x => x.GetMethod != null && x.GetMethod.IsPublic && !x.GetMethod.IsStatic);
@@ -33,6 +41,7 @@ public class MachineStation : AbstractAts
     /// <summary>
     /// Количество валов
     /// </summary>
+    [XmlElement("CountOfShaft")]
     public int? CountOfShaft { get; set; } = null;
 
     public MachineStation() : base()

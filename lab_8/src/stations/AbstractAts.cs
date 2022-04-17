@@ -3,26 +3,44 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Xml.Serialization;
 
 namespace lab_8;
 
 
-
+[XmlInclude(typeof(MachineStation))]
+[XmlInclude(typeof(CoordinateStation))]
+[Serializable]
 public abstract class AbstractAts : IDisposable
 {
+    [XmlIgnore] 
+    public static Type Serializer { get; set; } = null!;
+    
+    [XmlIgnore]
     private static IEnumerable<PropertyInfo> _PublicProperties;
 
+    [XmlIgnore]
     protected virtual IEnumerable<PropertyInfo> PublicProperties
     {
         get => AbstractAts._PublicProperties;
         set => AbstractAts._PublicProperties = value;
     }
 
+    [XmlIgnore]
     public static int ObjectCounter { get; private set; } = 0;
+    [XmlIgnore]
     protected bool Disposed = false;
+    [XmlIgnore]
     private static PhoneStationDict<Guid, AbstractAts> _AllTelephoneStations { get; set; } = new PhoneStationDict<Guid, AbstractAts> { };
-    public static PhoneStationDict<Guid, AbstractAts>  _AllObjects { get; set; } = new PhoneStationDict<Guid, AbstractAts>  { };
 
+    public static PhoneStationDict<Guid, AbstractAts> AllTelephoneStations
+    {
+        get => _AllTelephoneStations;
+    }
+    
+    [XmlIgnore]
+    public static PhoneStationDict<Guid, AbstractAts>  _AllObjects { get; set; } = new PhoneStationDict<Guid, AbstractAts>  { };
+    [XmlIgnore]
     protected virtual PhoneStationDict<Guid, AbstractAts>  AllObjects
     {
         get => _AllObjects;
@@ -34,33 +52,42 @@ public abstract class AbstractAts : IDisposable
 
     static AbstractAts()
     {
+        Serializer = typeof(AbstractAtsCollection<AbstractAts>);
         _PublicProperties = typeof(AbstractAts)
             .GetProperties()
             .Where(x => x.GetMethod != null && x.GetMethod.IsPublic && !x.GetMethod.IsStatic);
     }
     
     /// <summary> Id компании</summary>
+    [XmlElement("Id")]
     public readonly Guid Id = Guid.NewGuid();
 
     /// <summary> Адресс компании</summary>
+    [XmlElement("Address")]
     public string? Address { get; set; } = null;
 
     /// <summary> Количество клиентов компании</summary>
+    [XmlElement("CountOfUsers")]
     public int? CountOfUsers { get; set; } = null;
 
     /// <summary> стоимость ежемесячных услуг</summary>
+    [XmlElement("MonthlySubscriptionFee")]
     public Decimal? MonthlySubscriptionFee { get; set; } = null;
 
     /// <summary> Название компании</summary>
+    [XmlElement("CompanyName")]
     public string? CompanyName { get; set; } = null;
 
     /// <summary> ИНН компании</summary>
+    [XmlElement("Inn")]
     public string? Inn { get; set; } = null;
 
     /// <summary> Индекс доверия пользователей этой компании</summary>
+    [XmlElement("TrustIndex")]
     public float? TrustIndex { get; set; } = null;
 
     /// <summary> Дата основания компании</summary>
+    [XmlElement("DateOfFoundation")]
     public string? DateOfFoundation { get; set; } = null;
 
     public AbstractAts()
@@ -237,4 +264,21 @@ public abstract class AbstractAts : IDisposable
 
     public abstract void CreateCustomizedName();
 
+}
+
+public class AbstractAtsCollection<TAtsType> where TAtsType: AbstractAts
+{
+    [XmlArray("Collection"), XmlArrayItem("Item")]
+    public List<AbstractAts> Collection {get; set;}
+
+    public AbstractAtsCollection(List<AbstractAts> collection)
+    {
+        Collection = collection;
+    }
+
+    public AbstractAtsCollection()
+    {
+        
+    }
+    
 }

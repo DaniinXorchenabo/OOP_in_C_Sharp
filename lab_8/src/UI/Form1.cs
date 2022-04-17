@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace lab_8
 {
@@ -96,19 +98,11 @@ public partial class Form1 : Form
                 };
 
 
-                new CoordinateStation(_random);
-                new CoordinateStation(_random);
-                new MachineStation(_random);
+                // new CoordinateStation(_random);
+                // new CoordinateStation(_random);
+                // new MachineStation(_random);
+                
 
-                TreeNode parentNode = CreateTree(typeof(AbstractAts));
-                parentNode.ExpandAll();
-
-                treeView1.Nodes.Add(parentNode);
-                textBox1.ReadOnly = true;
-                createButton.Enabled = false;
-                deleteButton.Enabled = false;
-                createCustomizedNameButton.Enabled = false;
-                textBox2.Text = AbstractAts.ObjectCounter.ToString();
             }
             catch (Exception ex)
             {
@@ -422,49 +416,148 @@ public partial class Form1 : Form
         }
 
 
-        private void createCustomizedNameButton_Click(object sender, EventArgs e)
+        private async void createCustomizedNameButton_Click(object sender, EventArgs e)
         {
             try
             {
-                if (treeView1.SelectedNode != null &&
-                    _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode))
-                {
-                    _TreeNodeToTStationObj[treeView1.SelectedNode].CreateCustomizedName();
-                    var currentStation = _TreeNodeToTStationObj[treeView1.SelectedNode];
+                await Form1_FormClosing(null, null, typeof(AbstractAts));
 
-                    var lastCurrentParamIndex = (int) _currentParamIndex;
-
-                    label3.Text = currentStation.ToLongString();
-
-                    int index = 0;
-                    int targetIndex = 0;
-                    foreach (var someParam in currentStation.ParamsAsStrings())
-                    {
-                        if (((someParam as string)!).StartsWith("CompanyName="))
-                        {
-                            targetIndex = index;
-                        }
-
-                        index++;
-                    }
-
-
-                    listBox2.Items[targetIndex] = currentStation.ParamsAsStrings().ToList()[targetIndex];
-                    if (treeView1.SelectedNode != null
-                        && _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode))
-                    {
-                        var currentNode = treeView1.SelectedNode;
-                        var currentObj = _TreeNodeToTStationObj[currentNode];
-                        treeView1.SelectedNode.Text = currentObj.ToString();
-                        treeView1.SelectedNode = currentNode;
-                    }
-
-                    listBox2.SelectedIndex = _currentParamIndex;
-                }
+                // if (treeView1.SelectedNode != null &&
+                //     _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode))
+                // {
+                //     _TreeNodeToTStationObj[treeView1.SelectedNode].CreateCustomizedName();
+                //     var currentStation = _TreeNodeToTStationObj[treeView1.SelectedNode];
+                //
+                //     var lastCurrentParamIndex = (int) _currentParamIndex;
+                //
+                //     label3.Text = currentStation.ToLongString();
+                //
+                //     int index = 0;
+                //     int targetIndex = 0;
+                //     foreach (var someParam in currentStation.ParamsAsStrings())
+                //     {
+                //         if (((someParam as string)!).StartsWith("CompanyName="))
+                //         {
+                //             targetIndex = index;
+                //         }
+                //
+                //         index++;
+                //     }
+                //
+                //
+                //     listBox2.Items[targetIndex] = currentStation.ParamsAsStrings().ToList()[targetIndex];
+                //     if (treeView1.SelectedNode != null
+                //         && _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode))
+                //     {
+                //         var currentNode = treeView1.SelectedNode;
+                //         var currentObj = _TreeNodeToTStationObj[currentNode];
+                //         treeView1.SelectedNode.Text = currentObj.ToString();
+                //         treeView1.SelectedNode = currentNode;
+                //     }
+                //
+                //     listBox2.SelectedIndex = _currentParamIndex;
+                // }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.ToString(), "Что-то пошло не так...");
+            }
+        }
+
+
+        private async void  Form1_Load(object sender, EventArgs e)
+        {
+            await Form1_Load(sender, e, typeof(AbstractAts));
+            
+            TreeNode parentNode = CreateTree(typeof(AbstractAts));
+            parentNode.ExpandAll();
+
+            treeView1.Nodes.Add(parentNode);
+            textBox1.ReadOnly = true;
+            createButton.Enabled = false;
+            deleteButton.Enabled = false;
+            createCustomizedNameButton.Enabled = false;
+            textBox2.Text = AbstractAts.ObjectCounter.ToString();
+            
+            
+        }
+        private async Task Form1_Load(object sender, EventArgs e, Type? parentType = null)
+        {
+            
+            if (parentType == null)
+            {
+                parentType = typeof(AbstractAts);
+            }
+
+            List<Task> tasks = new List<Task>();
+            foreach (var itm in Assembly
+                         .GetAssembly(parentType)
+                         .GetTypes()
+                         .Where(type => type.IsSubclassOf(parentType)))
+            {
+                tasks.Add(Form1_Load(sender, e, itm));
+            }
+            
+            var parenCollectionType = parentType.GetProperty("Serializer").GetValue(parentType) as Type;
+            
+            string filePath = $"{parentType.Name}.xml";
+            if ((File.Exists(filePath)))
+            {
+                string serializedData;
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    serializedData = await reader.ReadToEndAsync();
+                }
+
+                var xmlSerializer = new XmlSerializer(parenCollectionType);
+                var stringReader = new StringReader(serializedData);
+               var collection =  xmlSerializer.Deserialize(stringReader);
+            }
+        }
+
+        private async void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            await Form1_FormClosing(sender, e, typeof(AbstractAts));
+        }
+        
+        private async Task Form1_FormClosing(object sender, FormClosingEventArgs e, Type? parentType = null)
+        {
+            if (parentType == null)
+            {
+                parentType = typeof(AbstractAts);
+            }
+
+            var parenCollectionType = parentType.GetProperty("Serializer").GetValue(parentType) as Type;
+            var myClassCollection = Activator.CreateInstance(parenCollectionType,
+                AbstractAts
+                .AllTelephoneStations
+                .Where(x => x.Value.GetType() == parentType)
+                .Select(x => x.Value)
+                .ToList());
+            
+            XmlSerializer xmlSerializer = new XmlSerializer(parenCollectionType);
+            StringWriter stringWriter = new StringWriter();
+            xmlSerializer.Serialize(stringWriter, myClassCollection);
+            string xml = stringWriter.ToString();
+            
+            
+            List<Task> tasks = new List<Task>();
+            foreach (var itm in Assembly
+                         .GetAssembly(parentType)
+                         .GetTypes()
+                         .Where(type => type.IsSubclassOf(parentType)))
+            {
+                tasks.Add(Form1_FormClosing(sender, e, itm));
+            }
+            
+            using (StreamWriter writer = new StreamWriter($"{parentType.Name}.xml", false))
+            {
+                await writer.WriteLineAsync(xml);
+            }
+
+            if (tasks.Count > 0)
+            {
+                await Task.WhenAll(tasks);
             }
         }
     }
