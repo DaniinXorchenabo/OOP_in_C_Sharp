@@ -20,10 +20,10 @@ public abstract class AbstractAts : IDisposable
 
     public static int ObjectCounter { get; private set; } = 0;
     protected bool Disposed = false;
-    private static List<AbstractAts> _AllTelephoneStations { get; set; } = new List<AbstractAts>() { };
-    public static List<AbstractAts> _AllObjects { get; set; } = new List<AbstractAts>() { };
+    private static PhoneStationDict<Guid, AbstractAts> _AllTelephoneStations { get; set; } = new PhoneStationDict<Guid, AbstractAts> { };
+    public static PhoneStationDict<Guid, AbstractAts>  _AllObjects { get; set; } = new PhoneStationDict<Guid, AbstractAts>  { };
 
-    protected virtual List<AbstractAts> AllObjects
+    protected virtual PhoneStationDict<Guid, AbstractAts>  AllObjects
     {
         get => _AllObjects;
         set => _AllObjects = value;
@@ -38,6 +38,9 @@ public abstract class AbstractAts : IDisposable
             .GetProperties()
             .Where(x => x.GetMethod != null && x.GetMethod.IsPublic && !x.GetMethod.IsStatic);
     }
+    
+    /// <summary> Id компании</summary>
+    public readonly Guid Id = Guid.NewGuid();
 
     /// <summary> Адресс компании</summary>
     public string? Address { get; set; } = null;
@@ -213,18 +216,18 @@ public abstract class AbstractAts : IDisposable
         Dispose(false);
     }
 
-    public static List<AbstractAts> operator +(List<AbstractAts> list, AbstractAts station)
+    public static PhoneStationDict<Guid, AbstractAts> operator +(PhoneStationDict<Guid, AbstractAts>  list, AbstractAts station)
     {
-        list.Add(station);
+        list.Add( new KeyValuePair<Guid, AbstractAts>(station.Id, station));
         if (list == _AllTelephoneStations)
         {
             AddItemEvent(station);
         }
         return list;
     }
-    public static List<AbstractAts> operator -(List<AbstractAts> list, AbstractAts station)
+    public static PhoneStationDict<Guid, AbstractAts> operator -(PhoneStationDict<Guid, AbstractAts>  list, AbstractAts station)
     {
-        list.Remove(station);
+        list.Remove(new KeyValuePair<Guid, AbstractAts>(station.Id, station));
         if (list == _AllTelephoneStations)
         {
             RemoveItemEvent(station);

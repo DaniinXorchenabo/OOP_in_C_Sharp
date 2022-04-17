@@ -7,9 +7,9 @@ namespace lab_8;
 
 public class MachineStation : AbstractAts
 {
-    public new static List<AbstractAts> _AllObjects { get; set; } = new List<AbstractAts>() { };
+    public new static PhoneStationDict<Guid, AbstractAts> _AllObjects { get; set; } = new PhoneStationDict<Guid, AbstractAts>{ };
 
-    protected override List<AbstractAts> AllObjects
+    protected override PhoneStationDict<Guid, AbstractAts> AllObjects
     {
         get => _AllObjects;
         set => _AllObjects = value;

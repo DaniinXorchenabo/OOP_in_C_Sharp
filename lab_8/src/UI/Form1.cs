@@ -132,9 +132,9 @@ public partial class Form1 : Form
                 CreateTree(itm, newNode);
             }
 
-            if (isBool && parentType.GetProperty("_AllObjects").GetValue(parentType) is List<AbstractAts> allObj)
+            if (isBool && parentType.GetProperty("_AllObjects").GetValue(parentType) is PhoneStationDict<Guid, AbstractAts> allObj)
             {
-                foreach (var stationObj in allObj)
+                foreach (var stationObj in allObj.Select(x => x.Value))
                 {
                     TreeNode currentNode = new TreeNode(stationObj.ToString());
                     newNode.Nodes.Add(currentNode);
