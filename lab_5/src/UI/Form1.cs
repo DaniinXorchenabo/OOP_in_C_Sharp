@@ -347,12 +347,27 @@ namespace lab_5
         {
             try
             {
-                Type currentClass;
-                if (
-                    treeView1 != null
-                    && treeView1.SelectedNode != null
-                    && _TreeNodeToTStationClass.ContainsKey(treeView1.SelectedNode)
-                    && !(currentClass = _TreeNodeToTStationClass[treeView1.SelectedNode]).IsAbstract)
+                Type currentClass = null;
+                if (newStation != null)
+                {
+                    textBox1.ReadOnly = true;
+                    // createButton.Enabled = true;c
+                    createCustomizedNameButton.Enabled = false;
+                    deleteButton.Enabled = false;
+                    listBox2.SelectedIndex = -1;
+
+                    AbstractAts newItem = newStation;
+
+                    textBox2.Text = AbstractAts.ObjectCounter.ToString();
+                    var newNode = new TreeNode(newItem.ToString());
+                    treeView1.Nodes[0].Nodes[1].Nodes.Add(newNode);
+                    _TreeNodeToTStationObj[newNode] = newItem;
+                }
+                else if (
+                    (treeView1 != null
+                     && treeView1.SelectedNode != null
+                     && _TreeNodeToTStationClass.ContainsKey(treeView1.SelectedNode)
+                     && !(currentClass = _TreeNodeToTStationClass[treeView1.SelectedNode]).IsAbstract))
                 {
                     textBox1.ReadOnly = true;
                     // createButton.Enabled = true;c
@@ -363,7 +378,7 @@ namespace lab_5
                     // var attr = currentClass.GetCustomAttribute(typeof(SessionAttribute)) as SessionAttribute;
                     // if (attr != null)
 
-                    AbstractAts newItem = newStation ?? (AbstractAts) Activator.CreateInstance(currentClass, _random);
+                    AbstractAts newItem = (AbstractAts) Activator.CreateInstance(currentClass, _random);
                     textBox2.Text = AbstractAts.ObjectCounter.ToString();
                     var newNode = new TreeNode(newItem.ToString());
                     treeView1.SelectedNode.Nodes.Add(newNode);
@@ -451,6 +466,19 @@ namespace lab_5
             {
                 MessageBox.Show(this, ex.ToString(), "Что-то пошло не так...");
             }
+        }
+
+        private void MyTimer_Tick(object sender, EventArgs e)
+        {
+            AddStation(new MachineStation(_random));
+        }
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+            Timer MyTimer = new Timer();
+            MyTimer.Interval = (1 * 20 * 1000);
+            MyTimer.Tick += new EventHandler(MyTimer_Tick);
+            MyTimer.Start();
         }
     }
 }
