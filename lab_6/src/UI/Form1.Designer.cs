@@ -33,7 +33,7 @@ namespace lab_6
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.createCustomizedNameButton = new System.Windows.Forms.Button();
+            this.createExceptionButton = new System.Windows.Forms.Button();
             this.createButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
@@ -84,7 +84,7 @@ namespace lab_6
             this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Controls.Add(this.createCustomizedNameButton, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(this.createExceptionButton, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.createButton, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.deleteButton, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel6, 0, 1);
@@ -101,17 +101,17 @@ namespace lab_6
             this.tableLayoutPanel2.Size = new System.Drawing.Size(194, 487);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
-            // createCustomizedNameButton
+            // createExceptionButton
             // 
-            this.createCustomizedNameButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.createCustomizedNameButton.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.createCustomizedNameButton.Location = new System.Drawing.Point(3, 392);
-            this.createCustomizedNameButton.Name = "createCustomizedNameButton";
-            this.createCustomizedNameButton.Size = new System.Drawing.Size(188, 43);
-            this.createCustomizedNameButton.TabIndex = 6;
-            this.createCustomizedNameButton.Text = "Кастомное имя";
-            this.createCustomizedNameButton.UseVisualStyleBackColor = false;
-            this.createCustomizedNameButton.Click += new System.EventHandler(this.createCustomizedNameButton_Click);
+            this.createExceptionButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.createExceptionButton.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.createExceptionButton.Location = new System.Drawing.Point(3, 392);
+            this.createExceptionButton.Name = "createExceptionButton";
+            this.createExceptionButton.Size = new System.Drawing.Size(188, 43);
+            this.createExceptionButton.TabIndex = 6;
+            this.createExceptionButton.Text = "Бросить исключение";
+            this.createExceptionButton.UseVisualStyleBackColor = false;
+            this.createExceptionButton.Click += new System.EventHandler(this.createCustomizedNameButton_Click);
             // 
             // createButton
             // 
@@ -308,7 +308,7 @@ namespace lab_6
             this.PerformLayout();
         }
 
-        private System.Windows.Forms.Button createCustomizedNameButton;
+        private System.Windows.Forms.Button createExceptionButton;
 
         private System.Windows.Forms.TreeView treeView1;
 

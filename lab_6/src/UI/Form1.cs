@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using lab_6.exceptions;
 
 namespace lab_6
 {
@@ -63,7 +64,7 @@ public partial class Form1 : Form
                 textBox1.ReadOnly = true;
                 createButton.Enabled = false;
                 deleteButton.Enabled = false;
-                createCustomizedNameButton.Enabled = false;
+                createExceptionButton.Enabled = true;
                 textBox2.Text = AbstractAts.ObjectCounter.ToString();
             }
             catch (Exception ex)
@@ -117,7 +118,6 @@ public partial class Form1 : Form
                     textBox1.ReadOnly = true;
                     createButton.Enabled = true;
                     deleteButton.Enabled = false;
-                    createCustomizedNameButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
 
                     for (var i = listBox2.Items.Count - 1; i >= 0; i--)
@@ -135,7 +135,6 @@ public partial class Form1 : Form
                     listBox2.SelectedIndex = -1;
                     createButton.Enabled = false;
                     deleteButton.Enabled = true;
-                    createCustomizedNameButton.Enabled = true;
                     textBox1.Text = "";
                     textBox1.ReadOnly = true;
 
@@ -159,7 +158,6 @@ public partial class Form1 : Form
                     textBox1.ReadOnly = true;
                     createButton.Enabled = false;
                     deleteButton.Enabled = false;
-                    createCustomizedNameButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
 
                     for (var i = listBox2.Items.Count - 1; i >= 0; i--)
@@ -203,7 +201,6 @@ public partial class Form1 : Form
                     textBox1.ReadOnly = true;
                     createButton.Enabled = false;
                     deleteButton.Enabled = false;
-                    createCustomizedNameButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
                 }
 
@@ -352,7 +349,6 @@ public partial class Form1 : Form
                 {
                     textBox1.ReadOnly = true;
                     // createButton.Enabled = true;c
-                    createCustomizedNameButton.Enabled = false;
                     deleteButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
 
@@ -407,41 +403,11 @@ public partial class Form1 : Form
         {
             try
             {
-                if (treeView1.SelectedNode != null &&
-                    _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode))
-                {
-                    _TreeNodeToTStationObj[treeView1.SelectedNode].CreateCustomizedName();
-                    var currentStation = _TreeNodeToTStationObj[treeView1.SelectedNode];
-
-                    var lastCurrentParamIndex = (int) _currentParamIndex;
-
-                    label3.Text = currentStation.ToLongString();
-
-                    int index = 0;
-                    int targetIndex = 0;
-                    foreach (var someParam in currentStation.ParamsAsStrings())
-                    {
-                        if (((someParam as string)!).StartsWith("CompanyName="))
-                        {
-                            targetIndex = index;
-                        }
-
-                        index++;
-                    }
-
-
-                    listBox2.Items[targetIndex] = currentStation.ParamsAsStrings().ToList()[targetIndex];
-                    if (treeView1.SelectedNode != null
-                        && _TreeNodeToTStationObj.ContainsKey(treeView1.SelectedNode))
-                    {
-                        var currentNode = treeView1.SelectedNode;
-                        var currentObj = _TreeNodeToTStationObj[currentNode];
-                        treeView1.SelectedNode.Text = currentObj.ToString();
-                        treeView1.SelectedNode = currentNode;
-                    }
-
-                    listBox2.SelectedIndex = _currentParamIndex;
-                }
+                throw new MyArrayTypeMismatchException("Какой-то текст сообщения");
+            }
+            catch (MyArrayTypeMismatchException ex)
+            {
+                MessageBox.Show(this, ex.ToString(), "Всё в порядке, это просто вызов моего исключения");
             }
             catch (Exception ex)
             {

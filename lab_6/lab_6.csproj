@@ -51,6 +51,7 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="src\AbstractAts.cs" />
         <Compile Include="src\CoordinateStation.cs" />
+        <Compile Include="src\exceptions\MyArrayTypeMismatchException.cs" />
         <Compile Include="src\MachineStation.cs" />
         <Compile Include="src\UI\Form1.cs">
           <SubType>Form</SubType>
