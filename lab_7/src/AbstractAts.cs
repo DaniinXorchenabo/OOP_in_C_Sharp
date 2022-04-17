@@ -6,6 +6,8 @@ using System.Reflection;
 
 namespace lab_7;
 
+
+
 public abstract class AbstractAts : IDisposable
 {
     private static IEnumerable<PropertyInfo> _PublicProperties;
@@ -26,6 +28,9 @@ public abstract class AbstractAts : IDisposable
         get => _AllObjects;
         set => _AllObjects = value;
     }
+
+    public static event Action<AbstractAts> AddItemEvent;
+    public static event Action<AbstractAts> RemoveItemEvent;
 
     static AbstractAts()
     {
@@ -63,8 +68,8 @@ public abstract class AbstractAts : IDisposable
 
     public AbstractAts(Random random)
     {
-        ObjectCounter++;
-        AbstractAts._AllTelephoneStations += this;
+
+       
         foreach (var field in PublicProperties)
         {
             if (field.PropertyType == typeof(string))
@@ -93,6 +98,8 @@ public abstract class AbstractAts : IDisposable
                 SetSomeValue(field.Name, Convert.ToDecimal((1000 * random.NextDouble())));
             }
         }
+        AbstractAts._AllTelephoneStations += this;
+        ObjectCounter++;
     }
 
     public string GenerateChar(Random random, int minInterval = 48, int maxInterval = 58)
@@ -209,11 +216,19 @@ public abstract class AbstractAts : IDisposable
     public static List<AbstractAts> operator +(List<AbstractAts> list, AbstractAts station)
     {
         list.Add(station);
+        if (list == _AllTelephoneStations)
+        {
+            AddItemEvent(station);
+        }
         return list;
     }
     public static List<AbstractAts> operator -(List<AbstractAts> list, AbstractAts station)
     {
         list.Remove(station);
+        if (list == _AllTelephoneStations)
+        {
+            RemoveItemEvent(station);
+        }
         return list;
     }
 

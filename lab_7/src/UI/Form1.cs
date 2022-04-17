@@ -4,13 +4,14 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace lab_7
 {
-public partial class Form1 : Form
+    public partial class Form1 : Form
     {
         private static Random _random = null!;
 
@@ -51,6 +52,50 @@ public partial class Form1 : Form
             {
                 CurrentStationIndex = -1;
                 InitializeComponent();
+
+                Action<AbstractAts> changeCounter;
+                AbstractAts.AddItemEvent += (tStation) =>
+                {
+                    textBox1.ReadOnly = true;
+                    // createButton.Enabled = true;c
+                    createCustomizedNameButton.Enabled = false;
+                    deleteButton.Enabled = false;
+                    listBox2.SelectedIndex = -1;
+                };
+                AbstractAts.AddItemEvent += changeCounter = (tStation) =>
+                {
+                    textBox2.Text = AbstractAts.ObjectCounter.ToString();
+                };
+
+                AbstractAts.AddItemEvent += (tStation) =>
+                {
+                    if (
+                        treeView1 != null
+                        && treeView1.SelectedNode != null
+                        && _TreeNodeToTStationClass.ContainsKey(treeView1.SelectedNode))
+                    {
+                        var newNode = new TreeNode(tStation.ToString());
+                        treeView1.SelectedNode.Nodes.Add(newNode);
+                        _TreeNodeToTStationObj[newNode] = tStation;
+                    }
+                };
+
+
+
+                AbstractAts.RemoveItemEvent += changeCounter;
+                AbstractAts.RemoveItemEvent += (tStation) =>
+                {
+                    if (_TreeNodeToTStationObj.ContainsValue(tStation))
+                    {
+                        var curentNode = _TreeNodeToTStationObj
+                            .Where(x => x.Value == tStation)
+                            .FirstOrDefault().Key;
+                        _TreeNodeToTStationObj.Remove(curentNode);
+                        curentNode.Parent.Nodes.Remove(curentNode);
+                    }
+                };
+
+
                 new CoordinateStation(_random);
                 new CoordinateStation(_random);
                 new MachineStation(_random);
@@ -349,23 +394,7 @@ public partial class Form1 : Form
                     && _TreeNodeToTStationClass.ContainsKey(treeView1.SelectedNode)
                     && !(currentClass = _TreeNodeToTStationClass[treeView1.SelectedNode]).IsAbstract)
                 {
-                    textBox1.ReadOnly = true;
-                    // createButton.Enabled = true;c
-                    createCustomizedNameButton.Enabled = false;
-                    deleteButton.Enabled = false;
-                    listBox2.SelectedIndex = -1;
-
-                    // var attr = currentClass.GetCustomAttribute(typeof(SessionAttribute)) as SessionAttribute;
-                    // if (attr != null)
-
                     AbstractAts newItem = newStation ?? (AbstractAts) Activator.CreateInstance(currentClass, _random);
-                    textBox2.Text = AbstractAts.ObjectCounter.ToString();
-                    var newNode = new TreeNode(newItem.ToString());
-                    treeView1.SelectedNode.Nodes.Add(newNode);
-                    _TreeNodeToTStationObj[newNode] = newItem;
-
-
-                    // AbstractAts newItem = new currentClass();
                 }
             }
             catch (Exception ex)
@@ -381,14 +410,6 @@ public partial class Form1 : Form
         {
             try
             {
-                if (_TreeNodeToTStationObj.ContainsValue(currentStation))
-                {
-                    var curentNode = _TreeNodeToTStationObj
-                        .Where(x => x.Value == currentStation)
-                        .FirstOrDefault().Key;
-                    _TreeNodeToTStationObj.Remove(curentNode);
-                    curentNode.Parent.Nodes.Remove(curentNode);
-                }
             }
             catch (Exception ex)
             {
@@ -398,9 +419,8 @@ public partial class Form1 : Form
             {
                 currentStation.Dispose();
             }
-
-            textBox2.Text = AbstractAts.ObjectCounter.ToString();
         }
+
 
         private void createCustomizedNameButton_Click(object sender, EventArgs e)
         {
