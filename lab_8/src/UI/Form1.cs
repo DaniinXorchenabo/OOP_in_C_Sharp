@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,7 +14,7 @@ using System.Xml.Serialization;
 
 namespace lab_8
 {
-public partial class Form1 : Form
+    public partial class Form1 : Form
     {
         private static Random _random = null!;
 
@@ -83,7 +84,6 @@ public partial class Form1 : Form
                 };
 
 
-
                 AbstractAts.RemoveItemEvent += changeCounter;
                 AbstractAts.RemoveItemEvent += (tStation) =>
                 {
@@ -101,8 +101,6 @@ public partial class Form1 : Form
                 // new CoordinateStation(_random);
                 // new CoordinateStation(_random);
                 // new MachineStation(_random);
-                
-
             }
             catch (Exception ex)
             {
@@ -110,15 +108,38 @@ public partial class Form1 : Form
             }
         }
 
-        private TreeNode CreateTree(Type parentType, TreeNode? parentNode = null)
+        private TreeNode CreateTree(
+            Type parentType,
+            TreeNode? parentNode = null,
+            Func<PhoneStationDict<Guid, AbstractAts>, IEnumerable<KeyValuePair<Guid, AbstractAts>>> sortedFunc = null)
         {
+            if (sortedFunc == null)
+            {
+                sortedFunc = d => d.Select(x => x);
+            }
+
+            var oldNodeKeyValPair = _TreeNodeToTStationClass.Where(x => x.Value.GetType() == parentType).ToList();
+            if (oldNodeKeyValPair.Count > 0)
+            {
+                oldNodeKeyValPair[0].Key.Nodes.Clear();
+                int index = 0;
+                for (var i = 0; i < (parentNode?.Nodes).Count; i++)
+                {
+                    if (parentNode?.Nodes[i].Name == oldNodeKeyValPair[0].Key.Name)
+                    {
+                        RecursionRemoveNodes(parentNode?.Nodes[i]);
+                        parentNode?.Nodes.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
             TreeNode newNode = new TreeNode(parentType.Name);
             _TreeNodeToTStationClass[newNode] = parentType;
             parentNode?.Nodes.Add(newNode);
             Type ourtype = parentType; // Базовый тип
             IEnumerable<Type> list = Assembly.GetAssembly(ourtype).GetTypes()
                 .Where(type => type.IsSubclassOf(ourtype)); // using System.Linq
-
+            
             var isBool = true;
             foreach (var itm in list)
             {
@@ -126,9 +147,11 @@ public partial class Form1 : Form
                 CreateTree(itm, newNode);
             }
 
-            if (isBool && parentType.GetProperty("_AllObjects").GetValue(parentType) is PhoneStationDict<Guid, AbstractAts> allObj)
+            if (isBool &&
+                parentType.GetProperty("_AllObjects")
+                    .GetValue(parentType) is PhoneStationDict<Guid, AbstractAts> allObj)
             {
-                foreach (var stationObj in allObj.Select(x => x.Value))
+                foreach (var stationObj in sortedFunc(allObj).Select(x => x.Value))
                 {
                     TreeNode currentNode = new TreeNode(stationObj.ToString());
                     newNode.Nodes.Add(currentNode);
@@ -140,6 +163,28 @@ public partial class Form1 : Form
         }
 
 
+        private void RecursionRemoveNodes(TreeNode parentNode)
+        {
+            if (parentNode.Nodes.Count > 0)
+            {
+                for (var i = parentNode.Nodes.Count - 1; i >= 0; i--)
+                {
+                    var node = parentNode.Nodes[i];
+                    RecursionRemoveNodes(node);
+                    if (_TreeNodeToTStationClass.ContainsKey(node))
+                    {
+                        _TreeNodeToTStationClass.Remove(node);
+                    }
+                    else if (_TreeNodeToTStationObj.ContainsKey(node))
+                    {
+                        _TreeNodeToTStationObj.Remove(node);
+                    }
+                }
+                
+            }
+            parentNode.Nodes.Clear();
+        }
+        
         private void SelectStation_SelectedIndexChanged_1(object sender, TreeViewEventArgs e)
         {
             try
@@ -415,7 +460,6 @@ public partial class Form1 : Form
             }
         }
 
-
         private async void createCustomizedNameButton_Click(object sender, EventArgs e)
         {
             try
@@ -465,10 +509,10 @@ public partial class Form1 : Form
         }
 
 
-        private async void  Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
         {
             await Form1_Load(sender, e, typeof(AbstractAts));
-            
+
             TreeNode parentNode = CreateTree(typeof(AbstractAts));
             parentNode.ExpandAll();
 
@@ -478,12 +522,10 @@ public partial class Form1 : Form
             deleteButton.Enabled = false;
             createCustomizedNameButton.Enabled = false;
             textBox2.Text = AbstractAts.ObjectCounter.ToString();
-            
-            
         }
+
         private async Task Form1_Load(object sender, EventArgs e, Type? parentType = null)
         {
-            
             if (parentType == null)
             {
                 parentType = typeof(AbstractAts);
@@ -497,9 +539,9 @@ public partial class Form1 : Form
             {
                 tasks.Add(Form1_Load(sender, e, itm));
             }
-            
+
             var parenCollectionType = parentType.GetProperty("Serializer").GetValue(parentType) as Type;
-            
+
             string filePath = $"{parentType.Name}.xml";
             if ((File.Exists(filePath)))
             {
@@ -511,7 +553,7 @@ public partial class Form1 : Form
 
                 var xmlSerializer = new XmlSerializer(parenCollectionType);
                 var stringReader = new StringReader(serializedData);
-               var collection =  xmlSerializer.Deserialize(stringReader);
+                var collection = xmlSerializer.Deserialize(stringReader);
             }
         }
 
@@ -519,7 +561,7 @@ public partial class Form1 : Form
         {
             await Form1_FormClosing(sender, e, typeof(AbstractAts));
         }
-        
+
         private async Task Form1_FormClosing(object sender, FormClosingEventArgs e, Type? parentType = null)
         {
             if (parentType == null)
@@ -530,17 +572,17 @@ public partial class Form1 : Form
             var parenCollectionType = parentType.GetProperty("Serializer").GetValue(parentType) as Type;
             var myClassCollection = Activator.CreateInstance(parenCollectionType,
                 AbstractAts
-                .AllTelephoneStations
-                .Where(x => x.Value.GetType() == parentType)
-                .Select(x => x.Value)
-                .ToList());
-            
+                    .AllTelephoneStations
+                    .Where(x => x.Value.GetType() == parentType)
+                    .Select(x => x.Value)
+                    .ToList());
+
             XmlSerializer xmlSerializer = new XmlSerializer(parenCollectionType);
             StringWriter stringWriter = new StringWriter();
             xmlSerializer.Serialize(stringWriter, myClassCollection);
             string xml = stringWriter.ToString();
-            
-            
+
+
             List<Task> tasks = new List<Task>();
             foreach (var itm in Assembly
                          .GetAssembly(parentType)
@@ -549,7 +591,7 @@ public partial class Form1 : Form
             {
                 tasks.Add(Form1_FormClosing(sender, e, itm));
             }
-            
+
             using (StreamWriter writer = new StreamWriter($"{parentType.Name}.xml", false))
             {
                 await writer.WriteLineAsync(xml);
@@ -559,6 +601,33 @@ public partial class Form1 : Form
             {
                 await Task.WhenAll(tasks);
             }
+        }
+
+        private void SortButton_Click(object sender, EventArgs e)
+        {
+            for (var i = treeView1.Nodes.Count - 1; i >= 0; i--)
+            {
+                RecursionRemoveNodes(treeView1.Nodes[i]);
+                treeView1.Nodes.RemoveAt(i);
+            }
+            
+            TreeNode parentNode = CreateTree(
+                typeof(AbstractAts), 
+                null, 
+                d =>
+                {
+                    var t =  (from entry in d orderby entry.Value ascending select entry);
+                    return t;
+                });
+            
+            parentNode.ExpandAll();
+
+            treeView1.Nodes.Add(parentNode);
+            textBox1.ReadOnly = true;
+            createButton.Enabled = false;
+            deleteButton.Enabled = false;
+            createCustomizedNameButton.Enabled = false;
+            textBox2.Text = AbstractAts.ObjectCounter.ToString();
         }
     }
 }
