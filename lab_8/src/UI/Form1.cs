@@ -144,7 +144,7 @@ namespace lab_8
             foreach (var itm in list)
             {
                 isBool = false;
-                CreateTree(itm, newNode);
+                CreateTree(itm, newNode, sortedFunc);
             }
 
             if (isBool &&
@@ -195,7 +195,7 @@ namespace lab_8
                     currentTreeView != null
                     && currentTreeView.SelectedNode != null
                     && _TreeNodeToTStationClass.ContainsKey(currentTreeView.SelectedNode)
-                    && !(currentClass = _TreeNodeToTStationClass[currentTreeView.SelectedNode]).IsAbstract)
+                    && (currentClass = _TreeNodeToTStationClass[currentTreeView.SelectedNode]) != null)
                 {
                     textBox1.ReadOnly = true;
                     createButton.Enabled = true;
@@ -207,8 +207,24 @@ namespace lab_8
                     {
                         listBox2.Items.RemoveAt(i);
                     }
-
                     textBox1.Text = "";
+                    
+                    List<string> createParams;
+                    (createParams = (currentClass.GetProperty("StaticPublicProperties").GetValue(currentClass) as IEnumerable<PropertyInfo>)
+                            .Select(x => x.Name).ToList())
+                        .Take(SecectParamForSortItem.Items.Count)
+                        .Zip(Enumerable.Range(0, SecectParamForSortItem.Items.Count), (tStationParam, index) =>
+                            SecectParamForSortItem.Items[index] = tStationParam.ToString())
+                        .ToList();
+                    createParams.Skip(SecectParamForSortItem.Items.Count).Select(x => SecectParamForSortItem.Items.Add(x)).ToList();
+                    for (var i = SecectParamForSortItem.Items.Count - 1; i >= createParams.Count(); i--)
+                    {
+                        SecectParamForSortItem.Items.RemoveAt(i);
+                    }
+
+                    SecectParamForSortItem.SelectedIndex = -1;
+
+
                 }
                 else if (
                     currentTreeView != null
@@ -236,7 +252,25 @@ namespace lab_8
                     {
                         listBox2.Items.RemoveAt(i);
                     }
+
+                    currentClass = _TreeNodeToTStationClass[treeView1.SelectedNode.Parent];
+                    List<string> createParams2;
+                    (createParams2 = (currentClass.GetProperty("StaticPublicProperties").GetValue(currentClass) as IEnumerable<PropertyInfo>)
+                            .Select(x => x.Name).ToList())
+                        .Take(SecectParamForSortItem.Items.Count)
+                        .Zip(Enumerable.Range(0, SecectParamForSortItem.Items.Count), (tStationParam, index) =>
+                            SecectParamForSortItem.Items[index] = tStationParam.ToString())
+                        .ToList();
+                    createParams2.Skip(SecectParamForSortItem.Items.Count).Select(x => SecectParamForSortItem.Items.Add(x)).ToList();
+                    for (var i = SecectParamForSortItem.Items.Count - 1; i >= createParams2.Count(); i--)
+                    {
+                        SecectParamForSortItem.Items.RemoveAt(i);
+                    }
+
+                    SecectParamForSortItem.SelectedIndex = -1;
                 }
+                
+
                 else
                 {
                     textBox1.ReadOnly = true;
@@ -251,6 +285,14 @@ namespace lab_8
                     }
 
                     textBox1.Text = "";
+                    
+                    for (var i = SecectParamForSortItem.Items.Count - 1; i >= 0; i--)
+                    {
+                        SecectParamForSortItem.Items.RemoveAt(i);
+                    }
+                    
+                    
+                    
                 }
             }
             catch (Exception ex)
@@ -324,7 +366,7 @@ namespace lab_8
                                     {
                                         add = 1;
                                     }
-                                    else if (textBox1.SelectionStart > 0 & textBox1.Text[textBox1.SelectionStart - 1] ==
+                                    else if (textBox1.SelectionStart > 0 && textBox1.Text[textBox1.SelectionStart - 1] ==
                                              paramValue[textBox1.SelectionStart - 1])
                                     {
                                         add = -1;
@@ -521,6 +563,7 @@ namespace lab_8
             createButton.Enabled = false;
             deleteButton.Enabled = false;
             createCustomizedNameButton.Enabled = false;
+            SortButton.Enabled = false;
             textBox2.Text = AbstractAts.ObjectCounter.ToString();
         }
 
@@ -614,10 +657,16 @@ namespace lab_8
             TreeNode parentNode = CreateTree(
                 typeof(AbstractAts), 
                 null, 
-                d =>
+                sortedFunc: d =>
                 {
-                    var t =  (from entry in d orderby entry.Value ascending select entry);
-                    return t;
+                    if (d.All(x => x.Value.ParamsAsStrings()
+                            .Any(y => y.StartsWith($"{SecectParamForSortItem.SelectedItem}="))))
+                    {
+                        var t = (from entry in d orderby entry.Value.GetSomeValue(SecectParamForSortItem.SelectedItem.ToString()) ascending select entry);
+                        return t.ToList().Select(x => x);
+                    }
+                    return from entry in d select entry;
+                    
                 });
             
             parentNode.ExpandAll();
@@ -628,6 +677,18 @@ namespace lab_8
             deleteButton.Enabled = false;
             createCustomizedNameButton.Enabled = false;
             textBox2.Text = AbstractAts.ObjectCounter.ToString();
+        }
+
+        private void SecectParamForSortItem_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (SecectParamForSortItem.SelectedIndex != -1)
+            {
+                SortButton.Enabled = true;
+            }
+            else
+            {
+                SortButton.Enabled = false;
+            }
         }
     }
 }

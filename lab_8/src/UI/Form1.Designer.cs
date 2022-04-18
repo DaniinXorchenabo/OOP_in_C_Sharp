@@ -76,7 +76,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(794, 701);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(794, 482);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel2
@@ -102,14 +102,14 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(194, 695);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(194, 476);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // createCustomizedNameButton
             // 
             this.createCustomizedNameButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.createCustomizedNameButton.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.createCustomizedNameButton.Location = new System.Drawing.Point(3, 600);
+            this.createCustomizedNameButton.Location = new System.Drawing.Point(3, 381);
             this.createCustomizedNameButton.Name = "createCustomizedNameButton";
             this.createCustomizedNameButton.Size = new System.Drawing.Size(188, 43);
             this.createCustomizedNameButton.TabIndex = 6;
@@ -121,7 +121,7 @@
             // 
             this.createButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.createButton.BackColor = System.Drawing.Color.DarkSeaGreen;
-            this.createButton.Location = new System.Drawing.Point(3, 551);
+            this.createButton.Location = new System.Drawing.Point(3, 332);
             this.createButton.Name = "createButton";
             this.createButton.Size = new System.Drawing.Size(188, 43);
             this.createButton.TabIndex = 2;
@@ -133,7 +133,7 @@
             // 
             this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.deleteButton.BackColor = System.Drawing.Color.LightCoral;
-            this.deleteButton.Location = new System.Drawing.Point(3, 649);
+            this.deleteButton.Location = new System.Drawing.Point(3, 430);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(188, 43);
             this.deleteButton.TabIndex = 3;
@@ -148,7 +148,7 @@
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 68F));
             this.tableLayoutPanel6.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this.textBox2, 1, 0);
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 411);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 192);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -181,7 +181,7 @@
             this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.treeView1.Location = new System.Drawing.Point(3, 3);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(188, 402);
+            this.treeView1.Size = new System.Drawing.Size(188, 183);
             this.treeView1.TabIndex = 5;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.SelectStation_SelectedIndexChanged_1);
             // 
@@ -193,7 +193,7 @@
             this.tableLayoutPanel8.Controls.Add(this.label4, 0, 0);
             this.tableLayoutPanel8.Controls.Add(this.SortButton, 0, 2);
             this.tableLayoutPanel8.Controls.Add(this.SecectParamForSortItem, 0, 1);
-            this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 434);
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 215);
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 3;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
@@ -231,6 +231,7 @@
             this.SecectParamForSortItem.Name = "SecectParamForSortItem";
             this.SecectParamForSortItem.Size = new System.Drawing.Size(182, 21);
             this.SecectParamForSortItem.TabIndex = 5;
+            this.SecectParamForSortItem.SelectedIndexChanged += new System.EventHandler(this.SecectParamForSortItem_SelectedIndexChanged);
             // 
             // tableLayoutPanel3
             // 
@@ -244,7 +245,7 @@
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(144, 695);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(144, 476);
             this.tableLayoutPanel3.TabIndex = 1;
             // 
             // listBox2
@@ -253,7 +254,7 @@
             this.listBox2.FormattingEnabled = true;
             this.listBox2.Location = new System.Drawing.Point(3, 3);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(138, 680);
+            this.listBox2.Size = new System.Drawing.Size(138, 459);
             this.listBox2.TabIndex = 2;
             this.listBox2.SelectedIndexChanged += new System.EventHandler(this.selectedParam_SelectedIndexChanged);
             // 
@@ -271,7 +272,7 @@
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 75.39503F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 24.60497F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(438, 695);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(438, 476);
             this.tableLayoutPanel4.TabIndex = 2;
             // 
             // tableLayoutPanel5
@@ -288,7 +289,7 @@
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(432, 517);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(432, 352);
             this.tableLayoutPanel5.TabIndex = 2;
             // 
             // tableLayoutPanel7
@@ -305,14 +306,14 @@
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(356, 511);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(356, 346);
             this.tableLayoutPanel7.TabIndex = 2;
             // 
             // textBox1
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.AutoCompleteCustomSource.AddRange(new string[] {"<нет значения>"});
-            this.textBox1.Location = new System.Drawing.Point(3, 242);
+            this.textBox1.Location = new System.Drawing.Point(3, 160);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(350, 20);
             this.textBox1.TabIndex = 0;
@@ -323,7 +324,7 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(64, 517);
+            this.label1.Size = new System.Drawing.Size(64, 352);
             this.label1.TabIndex = 0;
             this.label1.Text = "Значение:\r\n";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -331,16 +332,16 @@
             // label3
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.Location = new System.Drawing.Point(3, 523);
+            this.label3.Location = new System.Drawing.Point(3, 358);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(432, 172);
+            this.label3.Size = new System.Drawing.Size(432, 118);
             this.label3.TabIndex = 3;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 701);
+            this.ClientSize = new System.Drawing.Size(800, 482);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
             this.Text = "Лабораторная работа № 8";

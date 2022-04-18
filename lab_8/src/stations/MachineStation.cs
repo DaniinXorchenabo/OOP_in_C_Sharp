@@ -27,7 +27,13 @@ public class MachineStation : AbstractAts
     protected override IEnumerable<PropertyInfo> PublicProperties
     {
         get => MachineStation._PublicProperties;
-        set => MachineStation._PublicProperties = value;
+         set => MachineStation._PublicProperties = value;
+    }
+    [XmlIgnore]
+    public new static IEnumerable<PropertyInfo> StaticPublicProperties
+    {
+        get => MachineStation._PublicProperties;
+        private set => MachineStation._PublicProperties = value;
     }
 
     static MachineStation()

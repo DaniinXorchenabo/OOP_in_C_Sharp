@@ -25,6 +25,12 @@ public abstract class AbstractAts : IDisposable
         get => AbstractAts._PublicProperties;
         set => AbstractAts._PublicProperties = value;
     }
+    [XmlIgnore]
+    public new static IEnumerable<PropertyInfo> StaticPublicProperties
+    {
+        get => AbstractAts._PublicProperties;
+        private set => AbstractAts._PublicProperties = value;
+    }
 
     [XmlIgnore]
     public static int ObjectCounter { get; private set; } = 0;

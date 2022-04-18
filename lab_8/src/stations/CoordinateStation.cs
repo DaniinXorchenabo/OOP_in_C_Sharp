@@ -30,7 +30,12 @@ public class CoordinateStation : AbstractAts
         get => CoordinateStation._PublicProperties;
         set => CoordinateStation._PublicProperties = value;
     }
-
+    [XmlIgnore]
+    public new static IEnumerable<PropertyInfo> StaticPublicProperties
+    {
+        get => CoordinateStation._PublicProperties;
+        private set => CoordinateStation._PublicProperties = value;
+    }
     static CoordinateStation()
     {
         Serializer = typeof(AbstractAtsCollection<CoordinateStation>);
