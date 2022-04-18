@@ -119,19 +119,19 @@ public abstract class AbstractAts : IDisposable
             }
             else if (field.PropertyType == typeof(int) || field.PropertyType == typeof(int?))
             {
-                SetSomeValue(field.Name, Convert.ToInt32(Math.Floor(100000 * random.NextDouble())));
+                SetSomeValue(field.Name, (random.NextDouble() > 0.5?1:-1) * Convert.ToInt32(Math.Floor(100000 * random.NextDouble())));
             }
             else if (field.PropertyType == typeof(float) || field.PropertyType == typeof(float?))
             {
-                SetSomeValue(field.Name, ((100000 * random.NextDouble())));
+                SetSomeValue(field.Name, (random.NextDouble() > 0.5?1:-1) *((100000 * random.NextDouble())));
             }
             else if (field.PropertyType == typeof(double) || field.PropertyType == typeof(double?))
             {
-                SetSomeValue(field.Name, Convert.ToDouble((100000 * random.NextDouble())));
+                SetSomeValue(field.Name, (random.NextDouble() > 0.5?1:-1) *Convert.ToDouble((100000 * random.NextDouble())));
             }
             else if (field.PropertyType == typeof(Decimal) || field.PropertyType == typeof(Decimal?))
             {
-                SetSomeValue(field.Name, Convert.ToDecimal((1000 * random.NextDouble())));
+                SetSomeValue(field.Name, (random.NextDouble() > 0.5?1:-1) *Convert.ToDecimal((1000 * random.NextDouble())));
             }
         }
         AbstractAts._AllTelephoneStations += this;

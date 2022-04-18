@@ -61,7 +61,7 @@ namespace lab_8
                 {
                     textBox1.ReadOnly = true;
                     // createButton.Enabled = true;c
-                    createCustomizedNameButton.Enabled = false;
+                    createCustomizedNameButton.Enabled = true;
                     deleteButton.Enabled = false;
                     listBox2.SelectedIndex = -1;
                 };
@@ -133,13 +133,14 @@ namespace lab_8
                     }
                 }
             }
+
             TreeNode newNode = new TreeNode(parentType.Name);
             _TreeNodeToTStationClass[newNode] = parentType;
             parentNode?.Nodes.Add(newNode);
             Type ourtype = parentType; // Базовый тип
             IEnumerable<Type> list = Assembly.GetAssembly(ourtype).GetTypes()
                 .Where(type => type.IsSubclassOf(ourtype)); // using System.Linq
-            
+
             var isBool = true;
             foreach (var itm in list)
             {
@@ -180,11 +181,11 @@ namespace lab_8
                         _TreeNodeToTStationObj.Remove(node);
                     }
                 }
-                
             }
+
             parentNode.Nodes.Clear();
         }
-        
+
         private void SelectStation_SelectedIndexChanged_1(object sender, TreeViewEventArgs e)
         {
             try
@@ -200,31 +201,33 @@ namespace lab_8
                     textBox1.ReadOnly = true;
                     createButton.Enabled = true;
                     deleteButton.Enabled = false;
-                    createCustomizedNameButton.Enabled = false;
+                    createCustomizedNameButton.Enabled = true;
                     listBox2.SelectedIndex = -1;
 
                     for (var i = listBox2.Items.Count - 1; i >= 0; i--)
                     {
                         listBox2.Items.RemoveAt(i);
                     }
+
                     textBox1.Text = "";
-                    
+
                     List<string> createParams;
-                    (createParams = (currentClass.GetProperty("StaticPublicProperties").GetValue(currentClass) as IEnumerable<PropertyInfo>)
+                    (createParams =
+                            (currentClass.GetProperty("StaticPublicProperties").GetValue(currentClass) as
+                                IEnumerable<PropertyInfo>)
                             .Select(x => x.Name).ToList())
                         .Take(SecectParamForSortItem.Items.Count)
                         .Zip(Enumerable.Range(0, SecectParamForSortItem.Items.Count), (tStationParam, index) =>
                             SecectParamForSortItem.Items[index] = tStationParam.ToString())
                         .ToList();
-                    createParams.Skip(SecectParamForSortItem.Items.Count).Select(x => SecectParamForSortItem.Items.Add(x)).ToList();
+                    createParams.Skip(SecectParamForSortItem.Items.Count)
+                        .Select(x => SecectParamForSortItem.Items.Add(x)).ToList();
                     for (var i = SecectParamForSortItem.Items.Count - 1; i >= createParams.Count(); i--)
                     {
                         SecectParamForSortItem.Items.RemoveAt(i);
                     }
 
                     SecectParamForSortItem.SelectedIndex = -1;
-
-
                 }
                 else if (
                     currentTreeView != null
@@ -255,13 +258,16 @@ namespace lab_8
 
                     currentClass = _TreeNodeToTStationClass[treeView1.SelectedNode.Parent];
                     List<string> createParams2;
-                    (createParams2 = (currentClass.GetProperty("StaticPublicProperties").GetValue(currentClass) as IEnumerable<PropertyInfo>)
+                    (createParams2 =
+                            (currentClass.GetProperty("StaticPublicProperties").GetValue(currentClass) as
+                                IEnumerable<PropertyInfo>)
                             .Select(x => x.Name).ToList())
                         .Take(SecectParamForSortItem.Items.Count)
                         .Zip(Enumerable.Range(0, SecectParamForSortItem.Items.Count), (tStationParam, index) =>
                             SecectParamForSortItem.Items[index] = tStationParam.ToString())
                         .ToList();
-                    createParams2.Skip(SecectParamForSortItem.Items.Count).Select(x => SecectParamForSortItem.Items.Add(x)).ToList();
+                    createParams2.Skip(SecectParamForSortItem.Items.Count)
+                        .Select(x => SecectParamForSortItem.Items.Add(x)).ToList();
                     for (var i = SecectParamForSortItem.Items.Count - 1; i >= createParams2.Count(); i--)
                     {
                         SecectParamForSortItem.Items.RemoveAt(i);
@@ -269,14 +275,14 @@ namespace lab_8
 
                     SecectParamForSortItem.SelectedIndex = -1;
                 }
-                
+
 
                 else
                 {
                     textBox1.ReadOnly = true;
                     createButton.Enabled = false;
                     deleteButton.Enabled = false;
-                    createCustomizedNameButton.Enabled = false;
+                    createCustomizedNameButton.Enabled = true;
                     listBox2.SelectedIndex = -1;
 
                     for (var i = listBox2.Items.Count - 1; i >= 0; i--)
@@ -285,14 +291,11 @@ namespace lab_8
                     }
 
                     textBox1.Text = "";
-                    
+
                     for (var i = SecectParamForSortItem.Items.Count - 1; i >= 0; i--)
                     {
                         SecectParamForSortItem.Items.RemoveAt(i);
                     }
-                    
-                    
-                    
                 }
             }
             catch (Exception ex)
@@ -328,7 +331,7 @@ namespace lab_8
                     textBox1.ReadOnly = true;
                     createButton.Enabled = false;
                     deleteButton.Enabled = false;
-                    createCustomizedNameButton.Enabled = false;
+                    createCustomizedNameButton.Enabled = true;
                     listBox2.SelectedIndex = -1;
                 }
 
@@ -366,7 +369,8 @@ namespace lab_8
                                     {
                                         add = 1;
                                     }
-                                    else if (textBox1.SelectionStart > 0 && textBox1.Text[textBox1.SelectionStart - 1] ==
+                                    else if (textBox1.SelectionStart > 0 &&
+                                             textBox1.Text[textBox1.SelectionStart - 1] ==
                                              paramValue[textBox1.SelectionStart - 1])
                                     {
                                         add = -1;
@@ -562,7 +566,7 @@ namespace lab_8
             textBox1.ReadOnly = true;
             createButton.Enabled = false;
             deleteButton.Enabled = false;
-            createCustomizedNameButton.Enabled = false;
+            createCustomizedNameButton.Enabled = true;
             SortButton.Enabled = false;
             textBox2.Text = AbstractAts.ObjectCounter.ToString();
         }
@@ -653,29 +657,31 @@ namespace lab_8
                 RecursionRemoveNodes(treeView1.Nodes[i]);
                 treeView1.Nodes.RemoveAt(i);
             }
-            
+
             TreeNode parentNode = CreateTree(
-                typeof(AbstractAts), 
-                null, 
+                typeof(AbstractAts),
+                null,
                 sortedFunc: d =>
                 {
                     if (d.All(x => x.Value.ParamsAsStrings()
                             .Any(y => y.StartsWith($"{SecectParamForSortItem.SelectedItem}="))))
                     {
-                        var t = (from entry in d orderby entry.Value.GetSomeValue(SecectParamForSortItem.SelectedItem.ToString()) ascending select entry);
+                        var t = (from entry in d
+                            orderby entry.Value.GetSomeValue(SecectParamForSortItem.SelectedItem.ToString()) ascending
+                            select entry);
                         return t.ToList().Select(x => x);
                     }
+
                     return from entry in d select entry;
-                    
                 });
-            
+
             parentNode.ExpandAll();
 
             treeView1.Nodes.Add(parentNode);
             textBox1.ReadOnly = true;
             createButton.Enabled = false;
             deleteButton.Enabled = false;
-            createCustomizedNameButton.Enabled = false;
+            createCustomizedNameButton.Enabled = true;
             textBox2.Text = AbstractAts.ObjectCounter.ToString();
         }
 
@@ -688,6 +694,108 @@ namespace lab_8
             else
             {
                 SortButton.Enabled = false;
+            }
+        }
+
+        private void badCompaniesButton_Click(object sender, EventArgs e)
+        {
+            for (var i = viewFoundObjects.Items.Count - 1; i >= 0; i--)
+            {
+                viewFoundObjects.Items.RemoveAt(i);
+            }
+
+            viewOneFoundObject.Text = "";
+
+            var q = (from entity in AbstractAts.AllTelephoneStations
+                    where entity.Value.TrustIndex < 0
+                    select entity.Value)
+                .Select(x => viewFoundObjects.Items.Add(x)).ToList();
+        }
+
+        private void maxUsersButton_Click(object sender, EventArgs e)
+        {
+            for (var i = viewFoundObjects.Items.Count - 1; i >= 0; i--)
+            {
+                viewFoundObjects.Items.RemoveAt(i);
+            }
+
+            viewOneFoundObject.Text = "";
+            var station = (from entity in AbstractAts.AllTelephoneStations
+                orderby -entity.Value.CountOfUsers
+                select entity.Value).First();
+            viewFoundObjects.Items.Add(station);
+            viewOneFoundObject.Text = station.ToLongString();
+        }
+
+        private void minUsersButton_Click(object sender, EventArgs e)
+        {
+            for (var i = viewFoundObjects.Items.Count - 1; i >= 0; i--)
+            {
+                viewFoundObjects.Items.RemoveAt(i);
+            }
+
+            viewOneFoundObject.Text = "";
+            var station = (from entity in AbstractAts.AllTelephoneStations
+                orderby entity.Value.CountOfUsers
+                select entity.Value).First();
+            viewFoundObjects.Items.Add(station);
+            viewOneFoundObject.Text = station.ToLongString();
+        }
+
+        private void shortNameCompanyButton_Click(object sender, EventArgs e)
+        {
+            for (var i = viewFoundObjects.Items.Count - 1; i >= 0; i--)
+            {
+                viewFoundObjects.Items.RemoveAt(i);
+            }
+
+            viewOneFoundObject.Text = "";
+
+            var q = (from entity in AbstractAts.AllTelephoneStations
+                    where entity.Value.CompanyName != null && entity.Value.CompanyName.Length < 6
+                    orderby entity.Value.CompanyName.Length
+                    select entity.Value)
+                .Select(x => viewFoundObjects.Items.Add(x)).ToList();
+        }
+
+        private void goodBigCompaniesButton_Click(object sender, EventArgs e)
+        {
+            for (var i = viewFoundObjects.Items.Count - 1; i >= 0; i--)
+            {
+                viewFoundObjects.Items.RemoveAt(i);
+            }
+
+            viewOneFoundObject.Text = "";
+            var subquery = (from st in AbstractAts.AllTelephoneStations
+                select st.Value.TrustIndex).Average();
+            var q = (from entity in AbstractAts.AllTelephoneStations
+                    where entity.Value.CountOfUsers > 10_000 && entity.Value.TrustIndex > 0 &&
+                          entity.Value.TrustIndex > subquery
+                    let valueCompanyName = entity.Value.CompanyName
+                    where valueCompanyName != null
+                    orderby valueCompanyName.Length
+                    select entity.Value)
+                .Select(x => viewFoundObjects.Items.Add(x)).ToList();
+        }
+
+        private async void saveStringsButton_Click(object sender, EventArgs e)
+        {
+            string data = "";
+            foreach (var item in viewFoundObjects.Items)
+            {
+                if (item.GetType().GetProperty("ToLongString") != null)
+                {
+                    data += item.GetType().GetProperty("ToLongString")?.GetValue(item).ToString() + "\n";
+                }
+                else
+                {
+                    data += item.ToString() + "\n";
+                }
+            }
+
+            using (StreamWriter writer = new StreamWriter(@"DataAsString.txt", false))
+            {
+                await writer.WriteLineAsync(viewOneFoundObject.Text != "" ? viewOneFoundObject.Text : data);
             }
         }
     }
