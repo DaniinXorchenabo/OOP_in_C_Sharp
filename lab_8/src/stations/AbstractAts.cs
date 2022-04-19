@@ -119,7 +119,14 @@ public abstract class AbstractAts : IDisposable
             }
             else if (field.PropertyType == typeof(int) || field.PropertyType == typeof(int?))
             {
-                SetSomeValue(field.Name, (random.NextDouble() > 0.5?1:-1) * Convert.ToInt32(Math.Floor(100000 * random.NextDouble())));
+                if (field.Name == "CountOfUsers")
+                {
+                    SetSomeValue(field.Name,  Convert.ToInt32(Math.Floor(100000 * random.NextDouble())));
+                }
+                else
+                {
+                    SetSomeValue(field.Name, (random.NextDouble() > 0.5?1:-1) * Convert.ToInt32(Math.Floor(100000 * random.NextDouble())));
+                }
             }
             else if (field.PropertyType == typeof(float) || field.PropertyType == typeof(float?))
             {

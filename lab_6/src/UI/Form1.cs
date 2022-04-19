@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,8 +13,20 @@ using lab_6.exceptions;
 
 namespace lab_6
 {
+
+    public class SystemMessageBpxCall
+    {
+        [DllImport( "user32.dll" )]
+        public static extern int MessageBox( IntPtr hInstance, string lpText, string lpCaption, uint type );
+
+        private const uint MB_OK = 0x0;
+        private const uint MB_ICONASTERISK = 0x00000040;
+    }
+
 public partial class Form1 : Form
     {
+
+        
         private static Random _random = null!;
 
         private static Dictionary<TreeNode, AbstractAts> _TreeNodeToTStationObj =
@@ -407,7 +420,9 @@ public partial class Form1 : Form
             }
             catch (MyArrayTypeMismatchException ex)
             {
-                MessageBox.Show(this, ex.ToString(), "Всё в порядке, это просто вызов моего исключения");
+                SystemMessageBpxCall.MessageBox(IntPtr.Zero, ex.ToString(),
+                    "!!Всё в порядке, это просто вызов моего исключения", 0x0);
+                // MessageBox.Show(this, ex.ToString(), "Всё в порядке, это просто вызов моего исключения");
             }
             catch (Exception ex)
             {
@@ -417,3 +432,12 @@ public partial class Form1 : Form
     }
 
 }
+
+/*
+int? CountOfMarkers
+int? CountOfRegisters
+
+CoordinateStation()
+CoordinateStation(Random random)
+CreateCustomizedName()
+*/
